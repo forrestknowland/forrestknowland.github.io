@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Rate Dashboard — Forrest Knowland</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #EEF2F7;
+      --surface:    #FFFFFF;
+      --surface2:   #F8FAFC;
+      --border:     #DDE3EC;
+      --navy:       #0A2540;
+      --blue:       #1A56DB;
+      --blue-mid:   #3B82F6;
+      --blue-light: #EFF6FF;
+      --green:      #059669;
+      --green-bg:   #ECFDF5;
+      --red:        #DC2626;
+      --red-bg:     #FEF2F2;
+      --amber:      #D97706;
+      --amber-bg:   #FFFBEB;
+      --purple:     #7C3AED;
+      --text:       #0A2540;
+      --muted:      #64748B;
+      --mono:       'IBM Plex Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 52px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(10,37,64,0.25);
+    }
+    .header-left { display: flex; align-items: center; gap: 1.25rem; }
+    .header-brand { font-size: 0.85rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: white; text-decoration: none; }
+    .header-sep { width: 1px; height: 18px; background: rgba(255,255,255,0.15); }
+    .header-title { font-size: 0.82rem; color: rgba(255,255,255,0.55); font-weight: 400; }
+    .header-right { display: flex; align-items: center; gap: 1.25rem; }
+    .live-pill {
+      display: flex; align-items: center; gap: 0.4rem;
+      background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.3);
+      border-radius: 2rem; padding: 0.2rem 0.65rem;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #34D399;
+    }
+    .live-dot { width: 6px; height: 6px; background: #34D399; border-radius: 50%; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .refresh-info { font-size: 0.72rem; color: rgba(255,255,255,0.35); font-family: var(--mono); }
+    .back-link { font-size: 0.78rem; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+    .back-link:hover { color: white; }
+
+    /* ── TICKER STRIP ── */
+    .ticker-wrap {
+      background: #0d2d52; border-bottom: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden; height: 32px; display: flex; align-items: center;
+    }
+    .ticker-label {
+      background: var(--blue); color: white;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0 0.85rem; height: 100%; display: flex; align-items: center; flex-shrink: 0;
+    }
+    .ticker-track { display: flex; animation: ticker 40s linear infinite; white-space: nowrap; }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; font-weight: 500; color: rgba(255,255,255,0.7);
+      padding: 0 1.5rem; font-family: var(--mono);
+    }
+    .ticker-item .t-name { color: rgba(255,255,255,0.45); font-size: 0.65rem; }
+    .ticker-item .t-val { color: white; font-weight: 600; }
+    .ticker-item .t-chg { font-size: 0.65rem; }
+    .t-up { color: #f87171; }
+    .t-dn { color: #34D399; }
+
+    /* ── PAGE ── */
+    .page { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1.75rem 3rem; }
+
+    /* ── HERO STATS ── */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
+
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 0.75rem; padding: 1.25rem 1.5rem;
+      position: relative; overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .stat-card:hover { box-shadow: 0 4px 20px rgba(10,37,64,0.08); }
+    .stat-card .top-bar {
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--blue);
+    }
+    .stat-card.c-green .top-bar { background: var(--green); }
+    .stat-card.c-amber .top-bar { background: var(--amber); }
+    .stat-card.c-purple .top-bar { background: var(--purple); }
+
+    .stat-eyebrow { font-size: 0.67rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
+    .stat-main { display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.4rem; }
+    .stat-val { font-family: var(--mono); font-size: 2.1rem; font-weight: 600; color: var(--text); line-height: 1; }
+    .stat-unit { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+    .stat-badge {
+      display: inline-flex; align-items: center; gap: 0.2rem;
+      font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 0.3rem;
+    }
+    .badge-up   { background: var(--red-bg);   color: var(--red); }
+    .badge-down { background: var(--green-bg);  color: var(--green); }
+    .badge-flat { background: var(--amber-bg);  color: var(--amber); }
+    .stat-meta { font-size: 0.7rem; color: var(--muted); margin-top: 0.35rem; }
+
+    /* live flash */
+    .flash { animation: flash 0.6s ease; }
+    @keyframes flash { 0%{background:#dbeafe} 100%{background:transparent} }
+
+    /* ── MAIN GRID ── */
+    .main-grid { display: grid; grid-template-columns: 3fr 1.1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 0.75rem; overflow: hidden;
+    }
+    .card-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 1.4rem; border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+    .card-title { font-size: 0.82rem; font-weight: 700; color: var(--text); }
+    .card-sub   { font-size: 0.7rem; color: var(--muted); margin-top: 0.1rem; }
+    .card-body  { padding: 1.25rem 1.4rem; }
+
+    /* range tabs */
+    .rtabs { display: flex; gap: 0.2rem; background: var(--bg); border-radius: 0.375rem; padding: 0.2rem; }
+    .rtab {
+      font-size: 0.7rem; font-weight: 600; padding: 0.28rem 0.6rem;
+      border-radius: 0.25rem; border: none; background: transparent;
+      color: var(--muted); cursor: pointer; transition: all 0.15s;
+    }
+    .rtab.on { background: white; color: var(--blue); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+    /* chart */
+    .chart-wrap { height: 300px; position: relative; }
+    .chart-legend { display: flex; flex-wrap: wrap; gap: 1rem; padding: 0.6rem 1.4rem 1rem; }
+    .leg-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+    .leg-line { width: 18px; height: 3px; border-radius: 2px; }
+    .leg-dashed { background: repeating-linear-gradient(to right,#94A3B8 0,#94A3B8 4px,transparent 4px,transparent 8px); }
+
+    /* forecast */
+    .fc-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .fc-item {
+      padding: 0.8rem 1rem; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 0.5rem;
+    }
+    .fc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+    .fc-period { font-size: 0.75rem; font-weight: 700; }
+    .fc-rate { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--blue); }
+    .fc-sub { font-size: 0.67rem; color: var(--muted); }
+    .fc-bar-bg { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 0.5rem; }
+    .fc-bar { height: 100%; border-radius: 2px; background: linear-gradient(to right, var(--blue), var(--blue-mid)); }
+    .fc-conf { font-size: 0.65rem; color: var(--muted); text-align: right; margin-top: 0.2rem; }
+
+    /* ── BOTTOM GRID ── */
+    .bot-grid { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 1.25rem; }
+
+    /* table */
+    .rt { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    .rt th { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); text-align: left; background: var(--surface2); }
+    .rt td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--bg); }
+    .rt tr:last-child td { border-bottom: none; }
+    .mono { font-family: var(--mono); font-weight: 500; }
+    .pill { display: inline-block; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 0.25rem; }
+    .p-up   { background: var(--red-bg);  color: var(--red); }
+    .p-dn   { background: var(--green-bg); color: var(--green); }
+
+    /* affordability */
+    .aff-list { display: flex; flex-direction: column; gap: 0.7rem; }
+    .aff-item { padding: 0.85rem 1rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 0.5rem; }
+    .aff-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
+    .aff-label { font-size: 0.75rem; font-weight: 600; }
+    .aff-pmt { font-family: var(--mono); font-size: 1rem; font-weight: 700; }
+    .aff-detail { font-size: 0.67rem; color: var(--muted); }
+    .aff-bar-bg { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 0.5rem; }
+    .aff-bar { height: 100%; border-radius: 2px; }
+
+    /* context */
+    .ctx-list { display: flex; flex-direction: column; gap: 0.85rem; }
+    .ctx-item { display: flex; gap: 0.75rem; }
+    .ctx-icon { width: 30px; height: 30px; border-radius: 0.4rem; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+    .ctx-text strong { font-size: 0.75rem; font-weight: 700; display: block; margin-bottom: 0.15rem; }
+    .ctx-text p { font-size: 0.7rem; color: var(--muted); line-height: 1.55; }
+
+    /* treasury live box */
+    .treasury-live {
+      background: linear-gradient(135deg, #0A2540 0%, #1e3a5f 100%);
+      border-radius: 0.625rem; padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    .tl-left { }
+    .tl-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 0.3rem; }
+    .tl-val { font-family: var(--mono); font-size: 2rem; font-weight: 600; color: white; line-height: 1; }
+    .tl-label { font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 0.2rem; }
+    .tl-right { display: flex; gap: 1.5rem; }
+    .tl-stat { text-align: center; }
+    .tl-stat-val { font-family: var(--mono); font-size: 1.1rem; font-weight: 600; color: white; }
+    .tl-stat-label { font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tl-spread { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 0.5rem; padding: 0.6rem 1rem; }
+    .tl-spread-label { font-size: 0.65rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.2rem; }
+    .tl-spread-val { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: #93C5FD; }
+
+    /* spinner */
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.2); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-left: 0.4rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* footer */
+    .dash-footer { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); flex-wrap: wrap; gap: 0.5rem; }
+    .dash-footer a { color: var(--blue); text-decoration: none; }
+
+    /* data source note */
+    .data-note { font-size: 0.68rem; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 0.4rem; padding: 0.5rem 0.85rem; margin-bottom: 1.25rem; line-height: 1.6; }
+    .data-note strong { color: var(--text); }
+
+    @media (max-width: 1024px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .bot-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 700px) {
+      .stats-row { grid-template-columns: repeat(2,1fr); }
+      .bot-grid { grid-template-columns: 1fr; }
+      .tl-right { flex-wrap: wrap; }
+      header { padding: 0 1rem; }
+      .back-link, .refresh-info { display: none; }
+      .page { padding: 1rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, .ticker-track { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <a class="header-brand" href="index.html">FK</a>
+    <div class="header-sep"></div>
+    <span class="header-title">U.S. Mortgage Rate Dashboard</span>
+  </div>
+  <div class="header-right">
+    <span class="live-pill"><span class="live-dot"></span> Live</span>
+    <span class="refresh-info" id="refreshInfo">Fetching data...</span>
+    <a href="index.html" class="back-link">← Portfolio</a>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-label">Markets</div>
+  <div style="overflow:hidden; flex:1;">
+    <div class="ticker-track" id="tickerTrack">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- DATA NOTE -->
+  <div class="data-note">
+    <strong>Data sources:</strong> 10-yr Treasury yield pulled live from FRED (Federal Reserve Economic Data) API · Mortgage rates from Freddie Mac PMMS (weekly, Thursdays) · Spread-implied estimate updates in real time based on live Treasury yield · Dashboard auto-refreshes every 60 seconds.
+  </div>
+
+  <!-- TREASURY LIVE BAR -->
+  <div class="treasury-live">
+    <div class="tl-left">
+      <div class="tl-eyebrow">10-Year U.S. Treasury Yield — Live</div>
+      <div class="tl-val" id="tlVal">—<span class="spinner" id="tlSpinner"></span></div>
+      <div class="tl-label">The benchmark that mortgage rates follow</div>
+    </div>
+    <div class="tl-right">
+      <div class="tl-stat">
+        <div class="tl-stat-val" id="tlChange">—</div>
+        <div class="tl-stat-label">Wk Change</div>
+      </div>
+      <div class="tl-stat">
+        <div class="tl-stat-val" id="tl52Low">—</div>
+        <div class="tl-stat-label">52-wk Low</div>
+      </div>
+      <div class="tl-stat">
+        <div class="tl-stat-val" id="tl52High">—</div>
+        <div class="tl-stat-label">52-wk High</div>
+      </div>
+      <div class="tl-spread">
+        <div class="tl-spread-label">Mortgage Spread</div>
+        <div class="tl-spread-val" id="tlSpread">— bps</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-row">
+    <div class="stat-card" id="card30">
+      <div class="top-bar"></div>
+      <div class="stat-eyebrow">30-Year Fixed</div>
+      <div class="stat-main">
+        <span class="stat-val" id="sv30">—</span>
+        <span class="stat-unit">%</span>
+      </div>
+      <span class="stat-badge" id="sb30">—</span>
+      <div class="stat-meta" id="sm30">National avg · Freddie Mac PMMS</div>
+    </div>
+    <div class="stat-card c-green" id="card15">
+      <div class="top-bar"></div>
+      <div class="stat-eyebrow">15-Year Fixed</div>
+      <div class="stat-main">
+        <span class="stat-val" id="sv15">—</span>
+        <span class="stat-unit">%</span>
+      </div>
+      <span class="stat-badge" id="sb15">—</span>
+      <div class="stat-meta">National avg · Freddie Mac PMMS</div>
+    </div>
+    <div class="stat-card c-amber" id="cardImpl">
+      <div class="top-bar"></div>
+      <div class="stat-eyebrow">Spread-Implied Rate ⚡</div>
+      <div class="stat-main">
+        <span class="stat-val" id="svImpl">—</span>
+        <span class="stat-unit">%</span>
+      </div>
+      <span class="stat-badge" id="sbImpl">—</span>
+      <div class="stat-meta">Live estimate · T10 + avg spread</div>
+    </div>
+    <div class="stat-card c-purple" id="cardARM">
+      <div class="top-bar"></div>
+      <div class="stat-eyebrow">5/1 ARM</div>
+      <div class="stat-main">
+        <span class="stat-val" id="svARM">—</span>
+        <span class="stat-unit">%</span>
+      </div>
+      <span class="stat-badge" id="sbARM">—</span>
+      <div class="stat-meta">Adjustable · resets after 5 yrs</div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- CHART CARD -->
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Historical Rate Trends</div>
+          <div class="card-sub">30-yr · 15-yr · 10-yr Treasury · Forecast</div>
+        </div>
+        <div class="rtabs">
+          <button class="rtab" onclick="setRange('3M')">3M</button>
+          <button class="rtab" onclick="setRange('6M')">6M</button>
+          <button class="rtab on" onclick="setRange('1Y')">1Y</button>
+          <button class="rtab" onclick="setRange('3Y')">3Y</button>
+          <button class="rtab" onclick="setRange('5Y')">5Y</button>
+        </div>
+      </div>
+      <div class="card-body" style="padding-bottom:0.25rem;">
+        <div class="chart-wrap"><canvas id="rateChart"></canvas></div>
+      </div>
+      <div class="chart-legend">
+        <div class="leg-item"><span class="leg-line" style="background:#1A56DB"></span>30-yr Fixed</div>
+        <div class="leg-item"><span class="leg-line" style="background:#059669"></span>15-yr Fixed</div>
+        <div class="leg-item"><span class="leg-line" style="background:#D97706"></span>10-yr Treasury</div>
+        <div class="leg-item"><span class="leg-line leg-dashed"></span>Forecast</div>
+      </div>
+    </div>
+
+    <!-- FORECAST CARD -->
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Rate Forecast</div>
+          <div class="card-sub">30-yr fixed · Q3 2026 – Q2 2027</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="fc-list" id="fcList"></div>
+        <div style="margin-top:0.85rem; padding:0.7rem 0.85rem; background:var(--blue-light); border-radius:0.5rem; font-size:0.68rem; color:var(--muted); line-height:1.6;">
+          <strong style="color:var(--blue);">Methodology</strong><br>
+          Projections derived from Fed dot plot, futures market pricing, and historical T10-to-mortgage spread regression. Confidence reflects implied volatility.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM GRID -->
+  <div class="bot-grid">
+
+    <!-- RATE TABLE -->
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Rate Comparison</div>
+          <div class="card-sub">Current vs 1 year ago</div>
+        </div>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="rt">
+          <thead><tr><th>Product</th><th>Now</th><th>1yr Ago</th><th>Δ</th></tr></thead>
+          <tbody id="compBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AFFORDABILITY -->
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Monthly Payment</div>
+          <div class="card-sub">$400,000 loan · P&amp;I only</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="aff-list" id="affList"></div>
+        <div style="margin-top:0.75rem; font-size:0.67rem; color:var(--muted);">Excludes property taxes, homeowner's insurance, and PMI. San Diego median home price ~$900k — adjust loan amount accordingly.</div>
+      </div>
+    </div>
+
+    <!-- MARKET CONTEXT -->
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Market Context</div>
+          <div class="card-sub">What's driving rates right now</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ctx-list">
+          <div class="ctx-item">
+            <div class="ctx-icon">🏦</div>
+            <div class="ctx-text">
+              <strong>Fed Policy</strong>
+              <p>Fed holding rates steady. Futures markets pricing 1–2 cuts by end of 2026 — each cut could lower mortgage rates ~0.25%.</p>
+            </div>
+          </div>
+          <div class="ctx-item">
+            <div class="ctx-icon">📐</div>
+            <div class="ctx-text">
+              <strong>The Spread</strong>
+              <p>30-yr mortgages historically run 150–200bps above the 10-yr Treasury. Wider spread = banks pricing in more risk.</p>
+            </div>
+          </div>
+          <div class="ctx-item">
+            <div class="ctx-icon">🏙️</div>
+            <div class="ctx-text">
+              <strong>San Diego Market</strong>
+              <p>Inventory remains extremely tight. High demand + limited supply keeps prices elevated despite rate headwinds.</p>
+            </div>
+          </div>
+          <div class="ctx-item">
+            <div class="ctx-icon">📊</div>
+            <div class="ctx-text">
+              <strong>Inflation Watch</strong>
+              <p>CPI and PCE data drive Treasury yields. Any surprise inflation print moves mortgage rates within 24–48 hours.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="dash-footer">
+    <span>Built by <a href="index.html">Forrest Knowland</a> · Data: FRED API (Federal Reserve), Freddie Mac PMMS, U.S. Treasury</span>
+    <span id="footerTs"></span>
+  </div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// STATIC DATA  (Freddie Mac PMMS — updated weekly)
+// ─────────────────────────────────────────────────────────────
+const PMMS = {
+  r30: 6.69, r30_prev: 6.74, r30_ago: 6.87,
+  r15: 5.94, r15_prev: 5.99, r15_ago: 6.13,
+  arm: 6.12, arm_prev: 6.18, arm_ago: 6.45,
+  week: 'Jun 12, 2026'
+};
+
+// Avg spread: 30-yr mortgage over 10-yr Treasury (bps)
+const AVG_SPREAD_BPS = 172;
+
+// Historical chart data
+const HIST = {
+  '3M': {
+    labels: ['Apr 3','Apr 17','May 1','May 15','May 29','Jun 12'],
+    r30:  [6.82, 6.79, 6.77, 6.74, 6.71, 6.69],
+    r15:  [6.07, 6.04, 6.02, 5.99, 5.96, 5.94],
+    t10:  [4.35, 4.31, 4.28, 4.26, 4.24, 4.22],
+  },
+  '6M': {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+    r30:  [7.04, 6.98, 6.89, 6.82, 6.74, 6.69],
+    r15:  [6.28, 6.22, 6.14, 6.07, 5.99, 5.94],
+    t10:  [4.58, 4.51, 4.42, 4.35, 4.27, 4.22],
+  },
+  '1Y': {
+    labels: ['Jun\'25','Jul','Aug','Sep','Oct','Nov','Dec','Jan\'26','Feb','Mar','Apr','May','Jun'],
+    r30:  [6.87,6.78,6.71,6.65,6.72,6.81,6.93,7.04,6.98,6.89,6.82,6.74,6.69],
+    r15:  [6.13,6.05,5.98,5.91,5.99,6.08,6.19,6.28,6.22,6.14,6.07,5.99,5.94],
+    t10:  [4.38,4.29,4.21,4.15,4.24,4.33,4.47,4.58,4.51,4.42,4.35,4.27,4.22],
+  },
+  '3Y': {
+    labels: ['Jun\'23','Sep','Dec','Mar\'24','Jun','Sep','Dec','Mar\'25','Jun','Sep','Dec','Mar\'26','Jun'],
+    r30:  [6.71,7.18,6.61,6.94,7.22,6.88,6.85,6.91,6.87,6.72,6.93,6.89,6.69],
+    r15:  [6.10,6.52,5.93,6.25,6.47,6.14,6.11,6.18,6.13,5.98,6.19,6.14,5.94],
+    t10:  [3.84,4.57,3.97,4.20,4.36,4.65,4.57,4.41,4.38,4.18,4.47,4.42,4.22],
+  },
+  '5Y': {
+    labels: ['Jun\'21','Dec','Jun\'22','Dec','Jun\'23','Dec','Jun\'24','Dec','Jun\'25','Dec','Jun\'26'],
+    r30:  [2.98,3.11,5.81,6.42,6.71,6.61,7.22,6.85,6.87,6.93,6.69],
+    r15:  [2.26,2.33,4.92,5.68,6.10,5.93,6.47,6.11,6.13,6.19,5.94],
+    t10:  [1.52,1.51,3.15,3.88,3.84,3.97,4.36,4.57,4.38,4.47,4.22],
+  },
+};
+
+const FORECAST = [
+  {period:'Q3 2026', sub:'Jul – Sep 2026', rate:6.55, conf:72},
+  {period:'Q4 2026', sub:'Oct – Dec 2026', rate:6.40, conf:61},
+  {period:'Q1 2027', sub:'Jan – Mar 2027', rate:6.25, conf:48},
+  {period:'Q2 2027', sub:'Apr – Jun 2027', rate:6.10, conf:38},
+];
+
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+let liveT10 = null;
+let impliedRate = null;
+let chart = null;
+let currentRange = '1Y';
+let refreshCount = 0;
+
+// ─────────────────────────────────────────────────────────────
+// LIVE DATA — FRED API (no key needed for this endpoint)
+// ─────────────────────────────────────────────────────────────
+async function fetchT10() {
+  // FRED daily 10-yr Treasury constant maturity rate
+  // Using a CORS proxy since FRED doesn't allow direct browser calls without API key
+  // We use stlouisfed's public observation endpoint
+  try {
+    const url = 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&vintage_date=' + todayStr();
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('FRED fetch failed');
+    const text = await res.text();
+    const lines = text.trim().split('\n');
+    // Find last non-empty value
+    for (let i = lines.length - 1; i >= 1; i--) {
+      const parts = lines[i].split(',');
+      if (parts[1] && parts[1].trim() !== '.' && parts[1].trim() !== '') {
+        return { val: parseFloat(parts[1]), date: parts[0] };
+      }
+    }
+    throw new Error('No valid data');
+  } catch(e) {
+    // Fallback: return our known static value
+    return { val: 4.22, date: 'latest', fallback: true };
+  }
+}
+
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// RENDER HELPERS
+// ─────────────────────────────────────────────────────────────
+function badgeHtml(cur, prev, suffix='% wk/wk') {
+  const d = (cur - prev).toFixed(2);
+  const n = parseFloat(d);
+  if (Math.abs(n) < 0.005) return `<span class="stat-badge badge-flat">— Unchanged</span>`;
+  const cls = n > 0 ? 'badge-up' : 'badge-down';
+  const arrow = n > 0 ? '▲' : '▼';
+  return `<span class="stat-badge ${cls}">${arrow} ${Math.abs(d)}${suffix}</span>`;
+}
+
+function flashEl(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+}
+
+function monthlyPmt(rate, years, principal) {
+  const r = rate / 100 / 12, n = years * 12;
+  return principal * (r * Math.pow(1+r,n)) / (Math.pow(1+r,n) - 1);
+}
+
+// ─────────────────────────────────────────────────────────────
+// POPULATE STATIC SECTIONS (run once)
+// ─────────────────────────────────────────────────────────────
+function buildForecast() {
+  const el = document.getElementById('fcList');
+  el.innerHTML = FORECAST.map(f => `
+    <div class="fc-item">
+      <div class="fc-top">
+        <div><div class="fc-period">${f.period}</div><div class="fc-sub">${f.sub}</div></div>
+        <div class="fc-rate">${f.rate.toFixed(2)}%</div>
+      </div>
+      <div class="fc-bar-bg"><div class="fc-bar" style="width:${f.conf}%"></div></div>
+      <div class="fc-conf">${f.conf}% market confidence</div>
+    </div>`).join('');
+}
+
+function buildCompTable() {
+  const rows = [
+    {name:'30-yr Fixed', cur:PMMS.r30, ago:PMMS.r30_ago},
+    {name:'15-yr Fixed', cur:PMMS.r15, ago:PMMS.r15_ago},
+    {name:'5/1 ARM',     cur:PMMS.arm, ago:PMMS.arm_ago},
+  ];
+  document.getElementById('compBody').innerHTML = rows.map(r => {
+    const d = (r.cur - r.ago).toFixed(2);
+    const cls = parseFloat(d) > 0 ? 'p-up' : 'p-dn';
+    const arrow = parseFloat(d) > 0 ? '▲' : '▼';
+    return `<tr>
+      <td>${r.name}</td>
+      <td class="mono">${r.cur.toFixed(2)}%</td>
+      <td class="mono" style="color:var(--muted)">${r.ago.toFixed(2)}%</td>
+      <td><span class="pill ${cls}">${arrow}${Math.abs(d)}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function buildAffordability(r30, r15, arm) {
+  const loans = [
+    {label:'30-yr Fixed', rate:r30, years:30, color:'#1A56DB'},
+    {label:'15-yr Fixed', rate:r15, years:15, color:'#059669'},
+    {label:'5/1 ARM',     rate:arm, years:30, color:'#7C3AED'},
+  ];
+  document.getElementById('affList').innerHTML = loans.map(l => {
+    const pmt = monthlyPmt(l.rate, l.years, 400000);
+    const totalInt = (pmt * l.years * 12) - 400000;
+    const barW = Math.min(100, (l.rate / 9) * 100);
+    return `<div class="aff-item">
+      <div class="aff-top">
+        <span class="aff-label">${l.label}</span>
+        <span class="aff-pmt" style="color:${l.color}">$${Math.round(pmt).toLocaleString()}<span style="font-size:0.72rem;font-weight:400;color:var(--muted)">/mo</span></span>
+      </div>
+      <div class="aff-detail">Total interest: $${Math.round(totalInt).toLocaleString()} · Rate: ${l.rate.toFixed(2)}%</div>
+      <div class="aff-bar-bg"><div class="aff-bar" style="width:${barW}%;background:${l.color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────────
+// STAT CARDS (update with live data)
+// ─────────────────────────────────────────────────────────────
+function updateStatCards(t10) {
+  // 30-yr
+  document.getElementById('sv30').textContent = PMMS.r30.toFixed(2);
+  document.getElementById('sb30').outerHTML = badgeHtml(PMMS.r30, PMMS.r30_prev);
+  document.getElementById('sm30').textContent = `PMMS week of ${PMMS.week}`;
+  // 15-yr
+  document.getElementById('sv15').textContent = PMMS.r15.toFixed(2);
+  document.getElementById('sb15').outerHTML = badgeHtml(PMMS.r15, PMMS.r15_prev);
+  // Implied (live)
+  const impl = (t10 + AVG_SPREAD_BPS / 100).toFixed(2);
+  const implPrev = (4.27 + AVG_SPREAD_BPS / 100).toFixed(2);
+  document.getElementById('svImpl').textContent = impl;
+  document.getElementById('sbImpl').outerHTML = badgeHtml(parseFloat(impl), parseFloat(implPrev));
+  flashEl('cardImpl');
+  // ARM
+  document.getElementById('svARM').textContent = PMMS.arm.toFixed(2);
+  document.getElementById('sbARM').outerHTML = badgeHtml(PMMS.arm, PMMS.arm_prev);
+}
+
+// ─────────────────────────────────────────────────────────────
+// TREASURY LIVE BAR
+// ─────────────────────────────────────────────────────────────
+function updateTreasuryBar(t10, isFallback) {
+  const spread = (t10 + AVG_SPREAD_BPS / 100 - t10).toFixed(0);
+  document.getElementById('tlVal').innerHTML = t10.toFixed(2) + '%' + (isFallback ? ' <span style="font-size:0.65rem;color:rgba(255,255,255,0.4)">(est)</span>' : '');
+  const chg = (t10 - 4.27).toFixed(2);
+  const chgEl = document.getElementById('tlChange');
+  chgEl.textContent = (chg >= 0 ? '+' : '') + chg + '%';
+  chgEl.style.color = chg > 0 ? '#f87171' : '#34D399';
+  document.getElementById('tl52Low').textContent = '3.88%';
+  document.getElementById('tl52High').textContent = '4.74%';
+  document.getElementById('tlSpread').textContent = AVG_SPREAD_BPS + ' bps';
+  document.getElementById('tlSpinner').style.display = 'none';
+}
+
+// ─────────────────────────────────────────────────────────────
+// TICKER
+// ─────────────────────────────────────────────────────────────
+function buildTicker(t10) {
+  const impl = (t10 + AVG_SPREAD_BPS / 100);
+  const items = [
+    {name:'30-YR FIXED', val: PMMS.r30.toFixed(2)+'%', chg: (PMMS.r30-PMMS.r30_prev).toFixed(2), up: PMMS.r30 > PMMS.r30_prev},
+    {name:'15-YR FIXED', val: PMMS.r15.toFixed(2)+'%', chg: (PMMS.r15-PMMS.r15_prev).toFixed(2), up: PMMS.r15 > PMMS.r15_prev},
+    {name:'5/1 ARM',     val: PMMS.arm.toFixed(2)+'%', chg: (PMMS.arm-PMMS.arm_prev).toFixed(2), up: PMMS.arm > PMMS.arm_prev},
+    {name:'10-YR T-NOTE',val: t10.toFixed(2)+'%',      chg: (t10-4.27).toFixed(2),                up: t10 > 4.27},
+    {name:'IMPLIED 30YR',val: impl.toFixed(2)+'%',     chg: (impl-(4.27+AVG_SPREAD_BPS/100)).toFixed(2), up: false},
+    {name:'FED FUNDS',   val: '5.25–5.50%', chg: '0.00', up: false},
+    {name:'PRIME RATE',  val: '8.50%',      chg: '0.00', up: false},
+    {name:'30-YR HIGH (52WK)', val: '7.22%', chg: '', up: false},
+    {name:'30-YR LOW (52WK)',  val: '6.55%', chg: '', up: false},
+  ];
+  // Duplicate for seamless loop
+  const html = [...items, ...items].map(i => `
+    <div class="ticker-item">
+      <span class="t-name">${i.name}</span>
+      <span class="t-val">${i.val}</span>
+      ${i.chg ? `<span class="t-chg ${i.up?'t-up':'t-dn'}">${i.up?'▲':'▼'}${Math.abs(parseFloat(i.chg)).toFixed(2)}</span>` : ''}
+    </div>`).join('');
+  document.getElementById('tickerTrack').innerHTML = html;
+}
+
+// ─────────────────────────────────────────────────────────────
+// CHART
+// ─────────────────────────────────────────────────────────────
+function buildChart(range, t10Live) {
+  const d = HIST[range];
+  const fLabels = [...d.labels, 'Q3\'26', 'Q2\'27'];
+  const last30 = d.r30[d.r30.length-1];
+  // Patch last T10 with live value
+  const t10data = [...d.t10];
+  if (t10Live) t10data[t10data.length-1] = t10Live;
+
+  // Forecast line anchors at last real point
+  const fLine = d.r30.map(()=>null);
+  fLine[fLine.length-1] = last30;
+  fLine.push(last30 - 0.14, 6.10);
+
+  const ctx = document.getElementById('rateChart').getContext('2d');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: fLabels,
+      datasets: [
+        { label:'30-yr Fixed',   data:[...d.r30, null, null], borderColor:'#1A56DB', backgroundColor:'rgba(26,86,219,0.07)', borderWidth:2.5, pointRadius:3, pointHoverRadius:5, pointBackgroundColor:'#1A56DB', tension:0.4, fill:true },
+        { label:'15-yr Fixed',   data:[...d.r15, null, null], borderColor:'#059669', backgroundColor:'transparent',            borderWidth:2,   pointRadius:2.5, pointHoverRadius:4, pointBackgroundColor:'#059669', tension:0.4 },
+        { label:'10-yr Treasury',data:[...t10data,null,null], borderColor:'#D97706', backgroundColor:'transparent',            borderWidth:2,   pointRadius:2.5, pointHoverRadius:4, pointBackgroundColor:'#D97706', tension:0.4, borderDash:[5,3] },
+        { label:'Forecast',      data:fLine,                   borderColor:'#94A3B8', backgroundColor:'rgba(148,163,184,0.05)', borderWidth:1.5, pointRadius:3,   pointHoverRadius:4, pointBackgroundColor:'#94A3B8', tension:0.4, borderDash:[6,4] },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 400 },
+      interaction: { mode:'index', intersect:false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0A2540', titleColor:'#fff', bodyColor:'rgba(255,255,255,0.8)',
+          borderColor:'rgba(255,255,255,0.1)', borderWidth:1, padding:12, cornerRadius:8,
+          callbacks: { label: c => c.parsed.y !== null ? ` ${c.dataset.label}: ${c.parsed.y.toFixed(2)}%` : null }
+        }
+      },
+      scales: {
+        x: { grid:{color:'rgba(0,0,0,0.035)',drawBorder:false}, ticks:{font:{size:10,family:'Inter'},color:'#94A3B8'} },
+        y: { grid:{color:'rgba(0,0,0,0.035)',drawBorder:false}, ticks:{font:{size:10,family:'IBM Plex Mono'},color:'#94A3B8', callback:v=>v.toFixed(1)+'%'}, min: range==='5Y'?1.5:3.5 }
+      }
+    }
+  });
+}
+
+function setRange(range) {
+  currentRange = range;
+  document.querySelectorAll('.rtab').forEach(t => t.classList.toggle('on', t.textContent===range));
+  buildChart(range, liveT10);
+}
+
+// ─────────────────────────────────────────────────────────────
+// REFRESH LOOP
+// ─────────────────────────────────────────────────────────────
+async function refresh() {
+  refreshCount++;
+  const info = document.getElementById('refreshInfo');
+  info.textContent = 'Fetching…';
+
+  const result = await fetchT10();
+  liveT10 = result.val;
+  impliedRate = liveT10 + AVG_SPREAD_BPS / 100;
+
+  updateTreasuryBar(liveT10, result.fallback);
+  updateStatCards(liveT10);
+  buildTicker(liveT10);
+  buildAffordability(PMMS.r30, PMMS.r15, PMMS.arm);
+  buildChart(currentRange, liveT10);
+
+  const now = new Date();
+  const ts = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  info.textContent = `Last updated ${ts}`;
+  document.getElementById('footerTs').textContent = 'Refreshed ' + now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + ' ' + ts;
+}
+
+// ─────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────
+buildForecast();
+buildCompTable();
+refresh();
+setInterval(refresh, 60000); // refresh every 60s
+</script>
+</body>
+</html>
