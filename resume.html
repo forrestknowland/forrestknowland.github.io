@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume — Forrest Knowland</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --sand:    #F7F3EE;
+      --warm:    #EDE7DC;
+      --stone:   #C8BAA8;
+      --ink:     #2B2520;
+      --muted:   #7A6E66;
+      --accent:  #2E5E8E;
+      --accent2: #4A8DBF;
+      --white:   #FFFFFF;
+      --bg:      #F0F4F9;
+      --border:  #DDE3EC;
+      --navy:    #0A2540;
+      --mono:    'IBM Plex Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--sand); color: var(--ink); }
+
+    /* HEADER */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.1rem 2.5rem;
+      background: rgba(247,243,238,0.92); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--warm);
+    }
+    .nav-logo { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* PAGE */
+    .page { max-width: 860px; margin: 0 auto; padding: 8rem 2rem 5rem; }
+
+    /* HERO */
+    .page-eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.6rem; }
+    .page-eyebrow::before { content:''; width:24px; height:2px; background:var(--accent); display:inline-block; }
+    .page-title { font-family: 'Lora', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 600; margin-bottom: 1rem; line-height: 1.15; }
+    .page-title em { font-style: italic; color: var(--accent); }
+    .page-sub { font-size: 1rem; color: var(--muted); max-width: 540px; line-height: 1.75; margin-bottom: 2.5rem; font-weight: 300; }
+
+    /* DOWNLOAD CARD */
+    .download-card {
+      background: var(--white); border: 1px solid var(--warm);
+      border-radius: 0.75rem; padding: 2rem 2.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2.5rem;
+      box-shadow: 0 4px 20px rgba(43,37,32,0.06);
+    }
+    .dl-left { }
+    .dl-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .dl-meta { font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .dl-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 1rem; background: var(--warm); color: var(--muted); }
+    .btn-download {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--accent); color: white;
+      padding: 0.85rem 2rem; border-radius: 0.375rem;
+      font-size: 0.9rem; font-weight: 600; text-decoration: none;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .btn-download:hover { background: #254f78; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(46,94,142,0.3); }
+
+    /* DIVIDER */
+    .divider { height: 1px; background: var(--warm); margin: 2rem 0; }
+
+    /* RESUME PREVIEW */
+    .resume-wrap {
+      background: var(--white); border: 1px solid var(--warm);
+      border-radius: 0.75rem; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(43,37,32,0.08);
+    }
+    .resume-toolbar {
+      background: var(--navy); padding: 0.75rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .resume-toolbar span { font-size: 0.75rem; color: rgba(255,255,255,0.5); font-family: var(--mono); }
+    .resume-body { padding: 3rem 3.5rem; }
+
+    /* RESUME STYLES */
+    .r-name { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 800; color: var(--navy); letter-spacing: 0.04em; text-align: center; margin-bottom: 0.4rem; }
+    .r-contact { text-align: center; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.2rem; }
+    .r-links { text-align: center; font-size: 0.8rem; color: var(--accent); margin-bottom: 1.5rem; }
+    .r-divider { height: 3px; background: linear-gradient(to right, var(--accent), var(--accent2)); border-radius: 2px; margin-bottom: 1.25rem; }
+    .r-section { margin-bottom: 1.25rem; }
+    .r-section-title {
+      font-size: 0.65rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.5rem; padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--warm);
+    }
+    .r-body-text { font-size: 0.82rem; color: var(--ink); line-height: 1.7; margin-bottom: 0.5rem; }
+    .r-competencies { font-size: 0.8rem; color: var(--ink); line-height: 1.75; }
+    .r-job-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.2rem; flex-wrap: wrap; gap: 0.25rem; }
+    .r-job-title { font-size: 0.88rem; font-weight: 700; color: var(--ink); }
+    .r-company { font-size: 0.82rem; font-weight: 600; color: var(--accent); }
+    .r-dates { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+    .r-job-sub { font-size: 0.75rem; color: var(--muted); font-style: italic; margin-bottom: 0.4rem; }
+    .r-bullets { margin: 0.35rem 0 0.75rem 1rem; }
+    .r-bullet { font-size: 0.8rem; color: var(--ink); line-height: 1.65; margin-bottom: 0.3rem; padding-left: 0.75rem; position: relative; }
+    .r-bullet::before { content: '\2022'; position: absolute; left: 0; color: var(--accent); }
+    .r-project-bullet { font-size: 0.8rem; color: var(--ink); line-height: 1.65; margin-bottom: 0.3rem; padding-left: 0.75rem; position: relative; }
+    .r-project-bullet::before { content: '\2022'; position: absolute; left: 0; color: var(--accent); }
+    .r-tools { font-size: 0.75rem; color: var(--muted); font-style: italic; margin-top: 0.5rem; }
+    .r-cert-title { font-size: 0.85rem; font-weight: 700; color: var(--ink); margin-bottom: 0.2rem; }
+    .r-cert-body { font-size: 0.8rem; color: var(--ink); line-height: 1.65; margin-bottom: 0.6rem; }
+    .r-edu-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.1rem; }
+    .r-edu-degree { font-size: 0.85rem; font-weight: 700; color: var(--ink); }
+    .r-edu-year { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+    .r-edu-school { font-size: 0.8rem; color: var(--accent); margin-bottom: 0.6rem; }
+
+    /* BACK LINK */
+    .back-wrap { margin-top: 2rem; }
+    .back-link { font-size: 0.85rem; font-weight: 600; color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; }
+    .back-link:hover { color: #254f78; }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      .page { padding: 7rem 1.25rem 3rem; }
+      .resume-body { padding: 1.5rem; }
+      .download-card { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Forrest Knowland</a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <p class="page-eyebrow">Career</p>
+  <h1 class="page-title">Resume & <em>background.</em></h1>
+  <p class="page-sub">4 years in financial services, a FINRA SIE, and a growing stack of self-built finance tools. Download the full resume or read it right here.</p>
+
+  <!-- DOWNLOAD CARD -->
+  <div class="download-card">
+    <div class="dl-left">
+      <div class="dl-title">Forrest Knowland — Finance Professional</div>
+      <div class="dl-meta">
+        <span class="dl-badge">📄 Word Document</span>
+        <span class="dl-badge">✓ SIE Certified</span>
+        <span class="dl-badge">Updated June 2026</span>
+      </div>
+    </div>
+    <a href="Forrest_Knowland_Resume.docx" download class="btn-download">
+      ⬇ Download Resume
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RESUME PREVIEW -->
+  <div class="resume-wrap">
+    <div class="resume-toolbar">
+      <span>Forrest_Knowland_Resume.docx</span>
+      <span>Preview</span>
+    </div>
+    <div class="resume-body">
+
+      <div class="r-name">FORREST KNOWLAND</div>
+      <div class="r-contact">San Diego, CA &nbsp;&bull;&nbsp; (510) 919-2059 &nbsp;&bull;&nbsp; knowlandforrest@gmail.com</div>
+      <div class="r-links">forrestknowland.github.io &nbsp;&bull;&nbsp; linkedin.com/in/forrestknowland</div>
+      <div class="r-divider"></div>
+
+      <!-- SUMMARY -->
+      <div class="r-section">
+        <div class="r-section-title">Professional Summary</div>
+        <div class="r-body-text">Finance professional with 4+ years in financial services and a background that spans mortgage lending, client advisory, and financial technology. I've spent the last few years helping clients navigate complex financial decisions around escrow, loan products, insurance, and refinancing while consistently finding opportunities to add value through consultative selling. Outside of work I build AI-powered financial tools and dashboards, which has sharpened my analytical skills and given me hands-on experience with data, markets, and emerging technology. I hold an active FINRA SIE and am motivated to bring a mix of real industry experience and a genuine interest in the future of finance to a team that's building something.</div>
+      </div>
+
+      <!-- COMPETENCIES -->
+      <div class="r-section">
+        <div class="r-section-title">Core Competencies</div>
+        <div class="r-competencies">Financial Products &amp; Markets &bull; Consultative Client Advisory &bull; AI Tools &amp; Prompt Engineering &bull; Data Analysis &amp; Visualization &bull; Mortgage Lending &amp; Escrow &bull; Insurance &amp; HELOC Cross-Selling &bull; CRM / HubSpot / Salesforce &bull; Regulatory Compliance &bull; Python (Beginner) &bull; HTML/CSS &bull; Microsoft Excel &amp; Office Suite</div>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="r-section">
+        <div class="r-section-title">Professional Experience</div>
+
+        <div class="r-job-header">
+          <span class="r-job-title">Financial Services Representative &nbsp;<span style="color:var(--muted);font-weight:400">|</span>&nbsp; <span class="r-company">Guild Mortgage Company</span></span>
+          <span class="r-dates">2022 – Present</span>
+        </div>
+        <div class="r-job-sub">San Diego, CA — Customer-facing financial services role supporting mortgage clients across the full loan lifecycle.</div>
+        <div class="r-bullets">
+          <div class="r-bullet">Primary point of contact for inbound clients on mortgage payments, escrow analysis, property tax structures, and insurance review, consistently turning complex topics into clear next steps</div>
+          <div class="r-bullet">Identify cross-sell opportunities during client interactions and refer qualified customers to Covered Insurance Services, HELOC products, and refinance programs, working closely with loan officers to close the loop</div>
+          <div class="r-bullet">Handle escalated cases involving regulatory compliance, county filings, and loan servicing disputes, resolving the majority without escalation to management</div>
+          <div class="r-bullet">Track client interactions, referral outcomes, and pipeline activity in CRM tools including HubSpot and Salesforce across 1,000+ monthly touchpoints</div>
+          <div class="r-bullet">Regularly recommend alternative loan structures and payment options to help clients reduce monthly obligations, applying financial product knowledge in a practical, client-first way</div>
+        </div>
+
+        <div class="r-job-header">
+          <span class="r-job-title">Lead Producer &nbsp;<span style="color:var(--muted);font-weight:400">|</span>&nbsp; <span class="r-company">Bob Hoffman Photography &amp; Video</span></span>
+          <span class="r-dates">2017 – 2021</span>
+        </div>
+        <div class="r-job-sub">San Diego, CA — Full-service photography and video production company.</div>
+        <div class="r-bullets">
+          <div class="r-bullet">Managed 200+ client accounts with full responsibility for communication, logistics, and delivery, building a track record of repeat business and referrals</div>
+          <div class="r-bullet">Coordinated budgets, vendor relationships, and project timelines across multiple simultaneous engagements, developing the organizational discipline that carries directly into financial services work</div>
+        </div>
+
+        <div class="r-job-header">
+          <span class="r-job-title">Independent Video Producer &nbsp;<span style="color:var(--muted);font-weight:400">|</span>&nbsp; <span class="r-company">Self-Employed</span></span>
+          <span class="r-dates">2021 – 2022</span>
+        </div>
+        <div class="r-job-sub">San Diego, CA — Freelance production work during industry disruption.</div>
+        <div class="r-bullets">
+          <div class="r-bullet">Ran an independent video production practice during COVID-era industry disruption, managing client relationships, project delivery, and business finances on my own</div>
+        </div>
+
+        <div class="r-job-header">
+          <span class="r-job-title">Video Producer &nbsp;<span style="color:var(--muted);font-weight:400">|</span>&nbsp; <span class="r-company">Direct Images Interactive</span></span>
+          <span class="r-dates">2013 – 2017</span>
+        </div>
+        <div class="r-job-sub">San Diego, CA — Full-service interactive video production company.</div>
+        <div class="r-bullets">
+          <div class="r-bullet">Delivered client video projects end-to-end across industries including healthcare, tech, and real estate, managing timelines, budgets, and stakeholder communication from kickoff through final delivery</div>
+          <div class="r-bullet">Maintained long-term relationships with 50+ client accounts, building the communication and expectation-management habits that have carried through every role since</div>
+        </div>
+      </div>
+
+      <!-- AI PROJECTS -->
+      <div class="r-section">
+        <div class="r-section-title">AI &amp; Financial Technology Projects</div>
+        <div class="r-body-text">Outside of work I build financial tools and dashboards using AI-assisted development. Here is what is currently live at forrestknowland.github.io:</div>
+        <div class="r-bullets">
+          <div class="r-project-bullet"><strong>Live Mortgage Rate Dashboard</strong> — tracking 30-yr and 15-yr fixed rates, 10-yr Treasury yield, rate forecasts, and a monthly payment calculator that auto-refreshes via the FRED API</div>
+          <div class="r-project-bullet"><strong>San Diego Housing Affordability Tracker</strong> — neighborhood-level analysis across 23 communities, rent vs. buy comparison, and an income qualification calculator</div>
+          <div class="r-project-bullet"><strong>Equity Research Watchlist</strong> — covering MBLY, OUST, API, AMPL, and RSKD with real financial data including P&amp;L metrics, revenue trajectories, analyst price targets, and written investment theses</div>
+          <div class="r-project-bullet"><strong>Personal Finance Portfolio Site</strong> — built and hosted on GitHub Pages using HTML, CSS, JavaScript, and AI-assisted development tools</div>
+        </div>
+        <div class="r-tools">Tools: Claude AI, ChatGPT, GitHub, Chart.js, FRED API, HTML/CSS/JavaScript, Python (beginner)</div>
+      </div>
+
+      <!-- LICENSES -->
+      <div class="r-section">
+        <div class="r-section-title">Licenses &amp; Certifications</div>
+        <div class="r-cert-title">FINRA Securities Industry Essentials (SIE) — Active (2025)</div>
+        <div class="r-cert-body">Covers investment products, capital markets structure, regulatory framework, and financial planning principles. Satisfies the co-requisite for Series 7.</div>
+        <div class="r-cert-body"><strong>Series 7 &amp; Series 63</strong> — Actively preparing; available upon firm sponsorship</div>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="r-section">
+        <div class="r-section-title">Education</div>
+        <div class="r-edu-row">
+          <span class="r-edu-degree">B.A. Filmmaking, Minor in Economics</span>
+          <span class="r-edu-year">2013</span>
+        </div>
+        <div class="r-edu-school">San Diego State University</div>
+        <div class="r-edu-row">
+          <span class="r-edu-degree">B.A. Digital Filmmaking</span>
+          <span class="r-edu-year">2015</span>
+        </div>
+        <div class="r-edu-school">Expression College, Emeryville, CA</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="back-wrap">
+    <a href="index.html" class="back-link">← Back to portfolio</a>
+  </div>
+
+</div>
+
+</body>
+</html>
