@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Tracker — Forrest Knowland</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #F0F4F9;
+      --surface:  #FFFFFF;
+      --surface2: #F8FAFC;
+      --border:   #DDE3EC;
+      --navy:     #0A2540;
+      --blue:     #1A56DB;
+      --blue-lt:  #EFF6FF;
+      --green:    #059669;
+      --green-bg: #ECFDF5;
+      --red:      #DC2626;
+      --red-bg:   #FEF2F2;
+      --amber:    #D97706;
+      --amber-bg: #FFFBEB;
+      --purple:   #7C3AED;
+      --purple-bg:#F5F3FF;
+      --text:     #0A2540;
+      --muted:    #64748B;
+      --mono:     'IBM Plex Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* HEADER */
+    header {
+      background: var(--navy); padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 52px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(10,37,64,0.25);
+    }
+    .hdr-left { display: flex; align-items: center; gap: 1.25rem; }
+    .hdr-brand { font-size: 0.85rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: white; text-decoration: none; }
+    .hdr-sep { width: 1px; height: 18px; background: rgba(255,255,255,0.15); }
+    .hdr-title { font-size: 0.82rem; color: rgba(255,255,255,0.55); }
+    .hdr-right { display: flex; align-items: center; gap: 1rem; }
+    .live-pill { display: flex; align-items: center; gap: 0.4rem; background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.3); border-radius: 2rem; padding: 0.2rem 0.65rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #34D399; }
+    .live-dot { width: 6px; height: 6px; background: #34D399; border-radius: 50%; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .back-link { font-size: 0.78rem; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+    .back-link:hover { color: white; }
+
+    /* PAGE */
+    .page { max-width: 1280px; margin: 0 auto; padding: 1.75rem 2rem 4rem; }
+
+    /* PORTFOLIO SUMMARY BAR */
+    .summary-bar {
+      background: var(--navy); border-radius: 0.75rem; padding: 1.5rem 2rem;
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .sb-item { }
+    .sb-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.4rem; }
+    .sb-val { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: white; line-height: 1; }
+    .sb-change { font-size: 0.72rem; font-weight: 600; margin-top: 0.25rem; }
+    .pos { color: #34D399; }
+    .neg { color: #f87171; }
+
+    /* CARDS */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.25rem; }
+    .card-hd { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.4rem; border-bottom: 1px solid var(--border); background: var(--surface2); }
+    .card-title { font-size: 0.82rem; font-weight: 700; }
+    .card-sub { font-size: 0.7rem; color: var(--muted); margin-top: 0.1rem; }
+    .card-body { padding: 1.25rem 1.4rem; }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin: 1.5rem 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* STOCK CARDS GRID */
+    .stocks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem; }
+
+    .stock-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 0.75rem; overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .stock-card:hover { box-shadow: 0 6px 24px rgba(10,37,64,0.1); transform: translateY(-2px); }
+
+    .sc-header {
+      padding: 1.25rem 1.4rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .sc-left { }
+    .sc-ticker { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+    .sc-name { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+    .sc-sector { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.55rem; border-radius: 1rem; }
+    .sector-robotics { background: var(--blue-lt); color: var(--blue); }
+    .sector-finance { background: var(--purple-bg); color: var(--purple); }
+    .sector-saas { background: var(--green-bg); color: var(--green); }
+    .sc-right { text-align: right; }
+    .sc-price { font-family: var(--mono); font-size: 1.75rem; font-weight: 600; color: var(--text); line-height: 1; }
+    .sc-change { font-size: 0.75rem; font-weight: 700; margin-top: 0.3rem; }
+    .sc-mktcap { font-size: 0.68rem; color: var(--muted); margin-top: 0.2rem; }
+
+    .sc-body { padding: 1rem 1.4rem; }
+
+    /* METRICS ROW */
+    .metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+    .metric-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.6rem 0.75rem; }
+    .metric-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
+    .metric-val { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .metric-val.good { color: var(--green); }
+    .metric-val.warn { color: var(--amber); }
+    .metric-val.bad  { color: var(--red); }
+
+    /* MINI CHART */
+    .mini-chart-wrap { height: 80px; margin-bottom: 0.85rem; }
+
+    /* REVENUE BAR CHART */
+    .rev-bars { display: flex; align-items: flex-end; gap: 0.3rem; height: 60px; margin-bottom: 0.4rem; }
+    .rev-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+    .rev-bar { width: 100%; background: var(--blue); border-radius: 2px 2px 0 0; min-height: 4px; transition: height 0.5s ease; }
+    .rev-bar.projected { background: rgba(26,86,219,0.3); border: 1px dashed var(--blue); }
+    .rev-bar-label { font-size: 0.58rem; color: var(--muted); font-family: var(--mono); }
+
+    /* THESIS */
+    .thesis-box { background: var(--surface2); border-left: 3px solid var(--blue); border-radius: 0 0.4rem 0.4rem 0; padding: 0.75rem 1rem; margin-bottom: 0.75rem; }
+    .thesis-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); margin-bottom: 0.3rem; }
+    .thesis-text { font-size: 0.75rem; color: var(--muted); line-height: 1.6; }
+
+    /* RATING BADGE */
+    .rating-row { display: flex; justify-content: space-between; align-items: center; }
+    .rating-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 1rem; }
+    .r-buy { background: var(--green-bg); color: var(--green); }
+    .r-hold { background: var(--amber-bg); color: var(--amber); }
+    .r-watch { background: var(--blue-lt); color: var(--blue); }
+    .analyst-line { font-size: 0.68rem; color: var(--muted); font-style: italic; }
+
+    /* RISK GAUGE */
+    .risk-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .risk-label { font-size: 0.65rem; font-weight: 600; color: var(--muted); min-width: 55px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .risk-track { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .risk-fill { height: 100%; border-radius: 3px; }
+    .risk-val { font-size: 0.65rem; font-family: var(--mono); color: var(--muted); min-width: 30px; text-align: right; }
+
+    /* COMPARISON TABLE */
+    .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    .cmp-table th { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 0.5rem 0.85rem; border-bottom: 1px solid var(--border); text-align: left; background: var(--surface2); }
+    .cmp-table th:not(:first-child) { text-align: right; }
+    .cmp-table td { padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--bg); }
+    .cmp-table td:not(:first-child) { text-align: right; font-family: var(--mono); font-size: 0.75rem; }
+    .cmp-table tr:last-child td { border-bottom: none; }
+    .cmp-table tr:hover td { background: var(--surface2); }
+    .ticker-cell { font-weight: 700; font-size: 0.8rem; }
+    .name-cell { font-size: 0.73rem; color: var(--muted); }
+
+    /* PIE */
+    .alloc-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: center; }
+    .pie-wrap { height: 220px; }
+    .alloc-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .alloc-item { display: flex; align-items: center; gap: 0.75rem; }
+    .alloc-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .alloc-name { font-size: 0.78rem; font-weight: 500; flex: 1; }
+    .alloc-pct { font-family: var(--mono); font-size: 0.78rem; font-weight: 600; }
+
+    /* TABS */
+    .tabs { display: flex; gap: 0.2rem; background: var(--bg); border-radius: 0.375rem; padding: 0.2rem; }
+    .tab { font-size: 0.7rem; font-weight: 600; padding: 0.28rem 0.65rem; border-radius: 0.25rem; border: none; background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+    .tab.on { background: white; color: var(--blue); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+    /* GRID */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+    .chart-wrap { height: 260px; }
+
+    /* FOOTER */
+    .dash-footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); flex-wrap: wrap; gap: 0.5rem; }
+    .dash-footer a { color: var(--blue); text-decoration: none; }
+    .disclaimer { background: var(--amber-bg); border: 1px solid rgba(217,119,6,0.2); border-radius: 0.5rem; padding: 0.75rem 1rem; font-size: 0.72rem; color: var(--amber); margin-bottom: 1.25rem; line-height: 1.6; }
+
+    @media (max-width: 900px) {
+      .stocks-grid { grid-template-columns: 1fr; }
+      .summary-bar { grid-template-columns: repeat(2,1fr); }
+      .metrics-row { grid-template-columns: repeat(2,1fr); }
+      .grid-2 { grid-template-columns: 1fr; }
+      .alloc-wrap { grid-template-columns: 1fr; }
+      header { padding: 0 1rem; }
+      .page { padding: 1rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-left">
+    <a class="hdr-brand" href="index.html">FK</a>
+    <div class="hdr-sep"></div>
+    <span class="hdr-title">Portfolio & Watchlist Tracker</span>
+  </div>
+  <div class="hdr-right">
+    <span class="live-pill"><span class="live-dot"></span> Live</span>
+    <span id="refreshTs" style="font-size:0.68rem;color:rgba(255,255,255,0.35);font-family:var(--mono)">Loading...</span>
+    <a href="index.html" class="back-link">← Portfolio</a>
+  </div>
+</header>
+
+<div class="page">
+
+  <div class="disclaimer">
+    ⚠️ <strong>Investment Disclaimer:</strong> This tracker is for educational and demonstrative purposes only. Nothing here constitutes financial advice. All data sourced from public filings, Freddie Mac, and market data providers as of June 2026. Past performance does not guarantee future results.
+  </div>
+
+  <!-- SUMMARY BAR -->
+  <div class="summary-bar">
+    <div class="sb-item">
+      <div class="sb-label">Watchlist Holdings</div>
+      <div class="sb-val">5</div>
+      <div class="sb-change" style="color:rgba(255,255,255,0.4)">Stocks tracked</div>
+    </div>
+    <div class="sb-item">
+      <div class="sb-label">Avg Analyst Upside</div>
+      <div class="sb-val">+54%</div>
+      <div class="sb-change pos">vs current prices</div>
+    </div>
+    <div class="sb-item">
+      <div class="sb-label">Robotics Sector</div>
+      <div class="sb-val">2</div>
+      <div class="sb-change" style="color:rgba(255,255,255,0.4)">MBLY · OUST</div>
+    </div>
+    <div class="sb-item">
+      <div class="sb-label">Conviction Picks</div>
+      <div class="sb-val">3</div>
+      <div class="sb-change" style="color:rgba(255,255,255,0.4)">API · AMPL · RSKD</div>
+    </div>
+    <div class="sb-item">
+      <div class="sb-label">Last Updated</div>
+      <div class="sb-val" id="sumDate" style="font-size:0.9rem">—</div>
+      <div class="sb-change" style="color:rgba(255,255,255,0.4)">Jun 2026 data</div>
+    </div>
+  </div>
+
+  <!-- ROBOTICS SECTION -->
+  <div class="section-label">🤖 Robotics & Autonomous Systems</div>
+
+  <div class="stocks-grid">
+
+    <!-- MBLY -->
+    <div class="stock-card">
+      <div class="sc-header">
+        <div class="sc-left">
+          <div class="sc-ticker">NASDAQ: MBLY</div>
+          <div class="sc-name">Mobileye Global</div>
+          <span class="sc-sector sector-robotics">🚗 Autonomous Driving</span>
+        </div>
+        <div class="sc-right">
+          <div class="sc-price">$10.41</div>
+          <div class="sc-change pos">▲ +27% Q1 revenue YoY</div>
+          <div class="sc-mktcap">Mkt Cap: $8.6B</div>
+        </div>
+      </div>
+      <div class="sc-body">
+        <div class="metrics-row">
+          <div class="metric-box"><div class="metric-label">Revenue TTM</div><div class="metric-val">$1.9B</div></div>
+          <div class="metric-box"><div class="metric-label">Rev Growth</div><div class="metric-val good">+27% YoY</div></div>
+          <div class="metric-box"><div class="metric-label">EPS (TTM)</div><div class="metric-val bad">-$0.48</div></div>
+          <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val warn">4.5x</div></div>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-box"><div class="metric-label">Gross Margin</div><div class="metric-val good">~48%</div></div>
+          <div class="metric-box"><div class="metric-label">Op. Cash Flow</div><div class="metric-val good">$602M</div></div>
+          <div class="metric-box"><div class="metric-label">52W Low</div><div class="metric-val">$6.47</div></div>
+          <div class="metric-box"><div class="metric-label">52W High</div><div class="metric-val">$20.18</div></div>
+        </div>
+        <div style="height:80px;margin-bottom:0.85rem;"><canvas id="mblySpark"></canvas></div>
+        <div style="margin-bottom:0.85rem;">
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
+          <div class="rev-bars" id="mblyRevBars"></div>
+        </div>
+        <div class="thesis-box">
+          <div class="thesis-label">Investment Thesis</div>
+          <div class="thesis-text">Mobileye is the ADAS infrastructure layer inside 800M+ cars globally. Q1 2026 showed 27% revenue growth driven by Chinese OEM exports and Western ADAS adoption. The real option here is SuperVision and robotaxi — if even one major OEM scales it, current price looks cheap. Risk: Intel spinout overhang, Chinese competition from Momenta and Huawei.</div>
+        </div>
+        <div class="rating-row">
+          <span class="rating-badge r-watch">👁 Watching</span>
+          <span class="analyst-line">Avg PT: $13.29 · 15 Buy, 1 Sell</span>
+        </div>
+        <div class="risk-row" style="margin-top:0.75rem;">
+          <span class="risk-label">Volatility</span>
+          <div class="risk-track"><div class="risk-fill" style="width:72%;background:var(--amber)"></div></div>
+          <span class="risk-val">High</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUST -->
+    <div class="stock-card">
+      <div class="sc-header">
+        <div class="sc-left">
+          <div class="sc-ticker">NASDAQ: OUST</div>
+          <div class="sc-name">Ouster Inc.</div>
+          <span class="sc-sector sector-robotics">📡 LiDAR / Physical AI</span>
+        </div>
+        <div class="sc-right">
+          <div class="sc-price">$46.41</div>
+          <div class="sc-change pos">▲ +16.6% Jun 15</div>
+          <div class="sc-mktcap">Mid-cap · $2–10B range</div>
+        </div>
+      </div>
+      <div class="sc-body">
+        <div class="metrics-row">
+          <div class="metric-box"><div class="metric-label">Revenue 2025</div><div class="metric-val">$169M</div></div>
+          <div class="metric-box"><div class="metric-label">Rev Growth</div><div class="metric-val good">+52% YoY</div></div>
+          <div class="metric-box"><div class="metric-label">Net Income</div><div class="metric-val bad">-$60M</div></div>
+          <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val warn">14.7x</div></div>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-box"><div class="metric-label">EBITDA</div><div class="metric-val bad">-$58.5M</div></div>
+          <div class="metric-box"><div class="metric-label">Employees</div><div class="metric-val">320</div></div>
+          <div class="metric-box"><div class="metric-label">Fin. Strength</div><div class="metric-val good">8/10</div></div>
+          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$46.86</div></div>
+        </div>
+        <div style="height:80px;margin-bottom:0.85rem;"><canvas id="oustSpark"></canvas></div>
+        <div style="margin-bottom:0.85rem;">
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
+          <div class="rev-bars" id="oustRevBars"></div>
+        </div>
+        <div class="thesis-box">
+          <div class="thesis-label">Investment Thesis</div>
+          <div class="thesis-text">Ouster is positioning itself as the "eyes of Physical AI" — Rev8 digital lidar combines depth and color on one chip, a genuine hardware innovation. 52% revenue growth with a debt-free balance sheet is rare at this stage. New partnerships with FieldAI, AIM Intelligent Machines, and ARGUS Interception (defense) signal real diversification beyond automotive. Watch: insider selling is elevated.</div>
+        </div>
+        <div class="rating-row">
+          <span class="rating-badge r-buy">⭐ High Conviction</span>
+          <span class="analyst-line">Avg PT: $46.86 · Strong Buy consensus</span>
+        </div>
+        <div class="risk-row" style="margin-top:0.75rem;">
+          <span class="risk-label">Volatility</span>
+          <div class="risk-track"><div class="risk-fill" style="width:85%;background:var(--red)"></div></div>
+          <span class="risk-val">Very High</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONVICTION PICKS SECTION -->
+  <div class="section-label">💡 Personal Conviction Picks</div>
+
+  <div class="stocks-grid">
+
+    <!-- API -->
+    <div class="stock-card">
+      <div class="sc-header">
+        <div class="sc-left">
+          <div class="sc-ticker">NASDAQ: API</div>
+          <div class="sc-name">Agora Inc.</div>
+          <span class="sc-sector sector-saas">🎙 Conversational AI / RTE</span>
+        </div>
+        <div class="sc-right">
+          <div class="sc-price">$4.53</div>
+          <div class="sc-change pos">▲ Q1 rev +13.5% YoY</div>
+          <div class="sc-mktcap">Mkt Cap: $388M</div>
+        </div>
+      </div>
+      <div class="sc-body">
+        <div class="metrics-row">
+          <div class="metric-box"><div class="metric-label">Revenue TTM</div><div class="metric-val">$141M</div></div>
+          <div class="metric-box"><div class="metric-label">Gross Margin</div><div class="metric-val good">66.4%</div></div>
+          <div class="metric-box"><div class="metric-label">Net Income</div><div class="metric-val good">$9.5M</div></div>
+          <div class="metric-box"><div class="metric-label">EPS (TTM)</div><div class="metric-val good">$0.02</div></div>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-box"><div class="metric-label">Op. Cash Flow</div><div class="metric-val good">$27.2M</div></div>
+          <div class="metric-box"><div class="metric-label">Current Ratio</div><div class="metric-val good">4.58x</div></div>
+          <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val good">2.7x</div></div>
+          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$6.17</div></div>
+        </div>
+        <div style="height:80px;margin-bottom:0.85rem;"><canvas id="apiSpark"></canvas></div>
+        <div style="margin-bottom:0.85rem;">
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
+          <div class="rev-bars" id="apiRevBars"></div>
+        </div>
+        <div class="thesis-box">
+          <div class="thesis-label">Investment Thesis</div>
+          <div class="thesis-text">Agora just completed its 5th consecutive quarter of GAAP profitability — rare for a growth SaaS company. The pivot to Conversational AI Agents (voice automation for customer service, sales) is perfectly timed with the AI wave. Trading at ~2.7x sales with a 4.58 current ratio is deeply undervalued if the AI product line accelerates. Upside: +58% to analyst consensus target.</div>
+        </div>
+        <div class="rating-row">
+          <span class="rating-badge r-buy">⭐ High Conviction</span>
+          <span class="analyst-line">Avg PT: $6.17 · +36% upside</span>
+        </div>
+        <div class="risk-row" style="margin-top:0.75rem;">
+          <span class="risk-label">Volatility</span>
+          <div class="risk-track"><div class="risk-fill" style="width:55%;background:var(--amber)"></div></div>
+          <span class="risk-val">Medium</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AMPL -->
+    <div class="stock-card">
+      <div class="sc-header">
+        <div class="sc-left">
+          <div class="sc-ticker">NASDAQ: AMPL</div>
+          <div class="sc-name">Amplitude Inc.</div>
+          <span class="sc-sector sector-saas">📊 Digital Analytics / AI</span>
+        </div>
+        <div class="sc-right">
+          <div class="sc-price">$8.34</div>
+          <div class="sc-change pos">▲ Q1 rev +17% YoY</div>
+          <div class="sc-mktcap">Mkt Cap: $1.2B</div>
+        </div>
+      </div>
+      <div class="sc-body">
+        <div class="metrics-row">
+          <div class="metric-box"><div class="metric-label">Revenue TTM</div><div class="metric-val">$343M</div></div>
+          <div class="metric-box"><div class="metric-label">Gross Margin</div><div class="metric-val good">74%</div></div>
+          <div class="metric-box"><div class="metric-label">ARR</div><div class="metric-val good">$374M</div></div>
+          <div class="metric-box"><div class="metric-label">ARR Growth</div><div class="metric-val good">+17% YoY</div></div>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-box"><div class="metric-label">Net Income</div><div class="metric-val bad">-$88.5M</div></div>
+          <div class="metric-box"><div class="metric-label">Op. Cash Flow</div><div class="metric-val good">$29.8M</div></div>
+          <div class="metric-box"><div class="metric-label">Fwd P/S</div><div class="metric-val good">2.2x</div></div>
+          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$10.65</div></div>
+        </div>
+        <div style="height:80px;margin-bottom:0.85rem;"><canvas id="amplSpark"></canvas></div>
+        <div style="margin-bottom:0.85rem;">
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
+          <div class="rev-bars" id="amplRevBars"></div>
+        </div>
+        <div class="thesis-box">
+          <div class="thesis-label">Investment Thesis</div>
+          <div class="thesis-text">Amplitude at 2.2x forward sales is the cheapest it's ever been relative to growth. Q1 2026 revenue grew 17% YoY to $93.5M, beating estimates. The Statsig acquisition and AI monitoring tools ("analytics-one where AI monitors your product 24/7") could be a meaningful product unlock. FY2026 guidance raised to $397-403M. Risk: path to profitability still unclear despite positive op. cash flow.</div>
+        </div>
+        <div class="rating-row">
+          <span class="rating-badge r-buy">⭐ High Conviction</span>
+          <span class="analyst-line">Avg PT: $10.65 · +55% upside · 11 analysts Buy</span>
+        </div>
+        <div class="risk-row" style="margin-top:0.75rem;">
+          <span class="risk-label">Volatility</span>
+          <div class="risk-track"><div class="risk-fill" style="width:60%;background:var(--amber)"></div></div>
+          <span class="risk-val">Medium</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RSKD -->
+    <div class="stock-card">
+      <div class="sc-header">
+        <div class="sc-left">
+          <div class="sc-ticker">NYSE: RSKD</div>
+          <div class="sc-name">Riskified Ltd.</div>
+          <span class="sc-sector sector-finance">🛡 Fraud Prevention / Fintech</span>
+        </div>
+        <div class="sc-right">
+          <div class="sc-price">$4.76</div>
+          <div class="sc-change pos">▲ EBITDA +370% YoY</div>
+          <div class="sc-mktcap">Mkt Cap: $716M</div>
+        </div>
+      </div>
+      <div class="sc-body">
+        <div class="metrics-row">
+          <div class="metric-box"><div class="metric-label">Revenue TTM</div><div class="metric-val">$351M</div></div>
+          <div class="metric-box"><div class="metric-label">Rev Growth</div><div class="metric-val good">+7% YoY</div></div>
+          <div class="metric-box"><div class="metric-label">Adj. EBITDA</div><div class="metric-val good">$6.2M</div></div>
+          <div class="metric-box"><div class="metric-label">GMV Processed</div><div class="metric-val good">$37B</div></div>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-box"><div class="metric-label">Gross Margin</div><div class="metric-val good">52%</div></div>
+          <div class="metric-box"><div class="metric-label">Cash</div><div class="metric-val good">$276M</div></div>
+          <div class="metric-box"><div class="metric-label">EV/Rev</div><div class="metric-val good">1.32x</div></div>
+          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$5.55</div></div>
+        </div>
+        <div style="height:80px;margin-bottom:0.85rem;"><canvas id="rskdSpark"></canvas></div>
+        <div style="margin-bottom:0.85rem;">
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
+          <div class="rev-bars" id="rskdRevBars"></div>
+        </div>
+        <div class="thesis-box">
+          <div class="thesis-label">Investment Thesis</div>
+          <div class="thesis-text">Riskified processes $37B+ GMV and is approaching profitability — Adj. EBITDA surged 370% YoY in Q1 2026. Trading at 1.32x EV/Revenue with $276M cash on hand (nearly 40% of market cap) is a compelling value setup. The ACH fraud intelligence and agentic commerce play expands the TAM significantly. Niche pick: most analysts don't cover this one closely.</div>
+        </div>
+        <div class="rating-row">
+          <span class="rating-badge r-buy">⭐ High Conviction</span>
+          <span class="analyst-line">Avg PT: $5.55 · +17% upside · Value play</span>
+        </div>
+        <div class="risk-row" style="margin-top:0.75rem;">
+          <span class="risk-label">Volatility</span>
+          <div class="risk-track"><div class="risk-fill" style="width:45%;background:var(--green)"></div></div>
+          <span class="risk-val">Lower</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="card">
+    <div class="card-hd">
+      <div><div class="card-title">Full Comparison — All Holdings</div><div class="card-sub">Key metrics side by side · June 2026</div></div>
+      <div class="tabs">
+        <button class="tab on" onclick="showTab('valuation')">Valuation</button>
+        <button class="tab" onclick="showTab('growth')">Growth</button>
+        <button class="tab" onclick="showTab('health')">Health</button>
+      </div>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <table class="cmp-table" id="cmpTable"></table>
+    </div>
+  </div>
+
+  <!-- ALLOCATION + PERFORMANCE -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-hd"><div><div class="card-title">Watchlist Allocation</div><div class="card-sub">By sector weighting</div></div></div>
+      <div class="card-body">
+        <div class="alloc-wrap">
+          <div class="pie-wrap"><canvas id="allocPie"></canvas></div>
+          <div class="alloc-list" id="allocList"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div><div class="card-title">Analyst Price Targets vs Current</div><div class="card-sub">Implied upside per analyst consensus</div></div></div>
+      <div class="card-body"><div class="chart-wrap"><canvas id="uptideChart"></canvas></div></div>
+    </div>
+  </div>
+
+  <div class="dash-footer">
+    <span>Built by <a href="index.html">Forrest Knowland</a> · Data: SEC filings, Stockanalysis.com, Investing.com, Yahoo Finance · June 2026</span>
+    <span>For educational purposes only · Not financial advice</span>
+  </div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────
+const STOCKS = [
+  {
+    ticker:'MBLY', name:'Mobileye Global', price:10.41, pt:13.29,
+    rev:[1241,1400,1628,1900], revYears:['2023','2024','2025','2026E'],
+    spark:[18,20,14,12,10,8,9,10,11,10,10.41],
+    sector:'Robotics', color:'#1A56DB',
+    valuation:{ pe:'N/M', ps:'4.5x', evRev:'3.8x', pb:'0.9x' },
+    growth:{ revGrowth:'+27%', epsGrowth:'N/M', grossMargin:'48%', arrGrowth:'—' },
+    health:{ cash:'$1.2B', currentRatio:'3.5x', debtEq:'0.07x', ocf:'$602M' }
+  },
+  {
+    ticker:'OUST', name:'Ouster Inc.', price:46.41, pt:46.86,
+    rev:[73,111,169,230], revYears:['2023','2024','2025','2026E'],
+    spark:[8,12,18,22,28,32,38,40,36,39,46.41],
+    sector:'Robotics', color:'#7C3AED',
+    valuation:{ pe:'N/M', ps:'14.7x', evRev:'12x', pb:'N/A' },
+    growth:{ revGrowth:'+52%', epsGrowth:'N/M', grossMargin:'~40%', arrGrowth:'—' },
+    health:{ cash:'Debt-free', currentRatio:'N/A', debtEq:'0x', ocf:'Neg.' }
+  },
+  {
+    ticker:'API', name:'Agora Inc.', price:4.53, pt:6.17,
+    rev:[121,128,138,158], revYears:['2023','2024','2025','2026E'],
+    spark:[4.2,3.8,3.5,3.2,3.5,3.8,4.0,4.2,4.5,4.53,4.53],
+    sector:'Conviction', color:'#059669',
+    valuation:{ pe:'226x', ps:'2.7x', evRev:'1.9x', pb:'1.2x' },
+    growth:{ revGrowth:'+13.5%', epsGrowth:'+120%', grossMargin:'66.4%', arrGrowth:'—' },
+    health:{ cash:'Strong', currentRatio:'4.58x', debtEq:'Low', ocf:'$27M' }
+  },
+  {
+    ticker:'AMPL', name:'Amplitude Inc.', price:8.34, pt:10.65,
+    rev:[261,299,343,400], revYears:['2023','2024','2025','2026E'],
+    spark:[12,11,10,9,8,9,10,9,8.5,8.34,8.34],
+    sector:'Conviction', color:'#D97706',
+    valuation:{ pe:'N/M', ps:'2.2x', evRev:'2.0x', pb:'3.5x' },
+    growth:{ revGrowth:'+17%', epsGrowth:'N/M', grossMargin:'74%', arrGrowth:'+17%' },
+    health:{ cash:'$200M+', currentRatio:'2.1x', debtEq:'0.3x', ocf:'$29.8M' }
+  },
+  {
+    ticker:'RSKD', name:'Riskified Ltd.', price:4.76, pt:5.55,
+    rev:[275,322,351,380], revYears:['2023','2024','2025','2026E'],
+    spark:[4.8,4.5,4.2,4.0,3.9,4.1,4.3,4.5,4.6,4.76,4.76],
+    sector:'Conviction', color:'#DC2626',
+    valuation:{ pe:'N/M', ps:'2.2x', evRev:'1.32x', pb:'2.63x' },
+    growth:{ revGrowth:'+7%', epsGrowth:'N/M', grossMargin:'52%', arrGrowth:'—' },
+    health:{ cash:'$276M', currentRatio:'N/A', debtEq:'8.77%', ocf:'$43M' }
+  },
+];
+
+const TABS = {
+  valuation: ['Ticker','Name','Price','Analyst PT','Upside','P/S','EV/Rev','P/E'],
+  growth:    ['Ticker','Name','Price','Rev Growth','Gross Margin','ARR Growth','EPS Growth'],
+  health:    ['Ticker','Name','Price','Cash','Current Ratio','Debt/Equity','Op. Cash Flow'],
+};
+
+// ── SPARKLINES ───────────────────────────────────────────────
+function buildSpark(id, data, color) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  ctx.style.height = '80px';
+  ctx.style.maxHeight = '80px';
+  new Chart(ctx, {
+    type:'line',
+    data:{
+      labels: data.map((_,i)=>i),
+      datasets:[{
+        data, borderColor:color, backgroundColor:`${color}15`,
+        borderWidth:1.5, pointRadius:0, tension:0.4, fill:true
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
+      scales:{x:{display:false},y:{display:false}}
+    }
+  });
+}
+
+// ── REVENUE BARS ─────────────────────────────────────────────
+function buildRevBars(id, data, years, color) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const max = Math.max(...data);
+  el.innerHTML = data.map((v,i) => {
+    const h = Math.round((v/max)*55);
+    const isProj = years[i].includes('E');
+    return `<div class="rev-bar-wrap">
+      <div class="rev-bar${isProj?' projected':''}" style="height:${h}px;background:${isProj?'transparent':color};border-color:${color}"></div>
+      <div class="rev-bar-label">${years[i]}</div>
+      <div class="rev-bar-label">$${v}M</div>
+    </div>`;
+  }).join('');
+}
+
+// ── COMPARISON TABLE ─────────────────────────────────────────
+let currentTab = 'valuation';
+function buildTable(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.textContent.toLowerCase()===tab));
+  const headers = TABS[tab];
+  let html = `<thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+  STOCKS.forEach(s => {
+    const upside = (((s.pt - s.price)/s.price)*100).toFixed(1);
+    const uColor = parseFloat(upside) > 0 ? 'var(--green)' : 'var(--red)';
+    let row = `<tr>
+      <td><span class="ticker-cell" style="color:${s.color}">${s.ticker}</span></td>
+      <td><span class="name-cell">${s.name}</span></td>
+      <td>$${s.price}</td>`;
+    if (tab==='valuation') {
+      row += `<td>$${s.pt}</td>
+        <td style="color:${uColor};font-weight:700">+${upside}%</td>
+        <td>${s.valuation.ps}</td>
+        <td>${s.valuation.evRev}</td>
+        <td>${s.valuation.pe}</td>`;
+    } else if (tab==='growth') {
+      row += `<td style="color:var(--green)">${s.growth.revGrowth}</td>
+        <td>${s.growth.grossMargin}</td>
+        <td>${s.growth.arrGrowth}</td>
+        <td>${s.growth.epsGrowth}</td>`;
+    } else {
+      row += `<td>${s.health.cash}</td>
+        <td>${s.health.currentRatio}</td>
+        <td>${s.health.debtEq}</td>
+        <td>${s.health.ocf}</td>`;
+    }
+    row += `</tr>`;
+    html += row;
+  });
+  html += '</tbody>';
+  document.getElementById('cmpTable').innerHTML = html;
+}
+function showTab(tab) { buildTable(tab); }
+
+// ── ALLOCATION PIE ────────────────────────────────────────────
+function buildPie() {
+  const colors = STOCKS.map(s=>s.color);
+  new Chart(document.getElementById('allocPie'), {
+    type:'doughnut',
+    data:{
+      labels: STOCKS.map(s=>s.ticker),
+      datasets:[{data:[20,20,20,20,20], backgroundColor:colors, borderWidth:2, borderColor:'#fff'}]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: Equal weight (20%)`}}}
+    }
+  });
+  const list = document.getElementById('allocList');
+  list.innerHTML = STOCKS.map(s=>`
+    <div class="alloc-item">
+      <div class="alloc-dot" style="background:${s.color}"></div>
+      <span class="alloc-name">${s.ticker} — ${s.name}</span>
+      <span class="alloc-pct">20%</span>
+    </div>`).join('');
+}
+
+// ── UPSIDE CHART ──────────────────────────────────────────────
+function buildUpsideChart() {
+  const upsides = STOCKS.map(s => parseFloat((((s.pt-s.price)/s.price)*100).toFixed(1)));
+  new Chart(document.getElementById('uptideChart'), {
+    type:'bar',
+    data:{
+      labels: STOCKS.map(s=>s.ticker),
+      datasets:[
+        {label:'Current Price', data:STOCKS.map(s=>s.price), backgroundColor:STOCKS.map(s=>s.color+'99'), borderRadius:4},
+        {label:'Analyst Price Target', data:STOCKS.map(s=>s.pt), backgroundColor:'transparent', borderColor:STOCKS.map(s=>s.color), borderWidth:2, borderRadius:4, type:'bar'},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom',labels:{font:{size:11}}},
+        tooltip:{callbacks:{
+          afterBody: (items) => {
+            const i = items[0].dataIndex;
+            const s = STOCKS[i];
+            const up = (((s.pt-s.price)/s.price)*100).toFixed(1);
+            return [`Implied upside: +${up}%`];
+          }
+        }}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:11}}},
+        y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:10,family:'IBM Plex Mono'},callback:v=>'$'+v}}
+      }
+    }
+  });
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+STOCKS.forEach(s => {
+  buildSpark(`${s.ticker.toLowerCase()}Spark`, s.spark, s.color);
+  buildRevBars(`${s.ticker.toLowerCase()}RevBars`, s.rev, s.revYears, s.color);
+});
+buildTable('valuation');
+buildPie();
+buildUpsideChart();
+
+const now = new Date();
+const ts = now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+document.getElementById('refreshTs').textContent = 'Data as of '+ts;
+document.getElementById('sumDate').textContent = ts;
+</script>
+</body>
+</html>
