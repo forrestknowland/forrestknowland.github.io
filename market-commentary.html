@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Market Commentary — Forrest Knowland</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --sand:   #F7F3EE;
+      --warm:   #EDE7DC;
+      --stone:  #C8BAA8;
+      --ink:    #2B2520;
+      --muted:  #7A6E66;
+      --accent: #2E5E8E;
+      --accent2:#4A8DBF;
+      --white:  #FFFFFF;
+      --border: #DDE3EC;
+      --navy:   #0A2540;
+      --green:  #059669;
+      --green-bg:#ECFDF5;
+      --red:    #DC2626;
+      --red-bg: #FEF2F2;
+      --amber:  #D97706;
+      --amber-bg:#FFFBEB;
+      --mono:   'IBM Plex Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--sand); color: var(--ink); line-height: 1.6; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.1rem 2.5rem;
+      background: rgba(247,243,238,0.92); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--warm);
+    }
+    .nav-logo { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* PAGE */
+    .page { max-width: 800px; margin: 0 auto; padding: 8rem 2rem 5rem; }
+
+    /* EYEBROW */
+    .eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.6rem; }
+    .eyebrow::before { content:''; width:24px; height:2px; background:var(--accent); display:inline-block; }
+
+    /* HERO */
+    .page-title { font-family: 'Lora', serif; font-size: clamp(2rem,5vw,2.8rem); font-weight: 600; margin-bottom: 0.75rem; line-height: 1.2; }
+    .page-title em { font-style: italic; color: var(--accent); }
+    .page-sub { font-size: 1rem; color: var(--muted); max-width: 560px; line-height: 1.75; margin-bottom: 0.5rem; font-weight: 300; }
+    .disclaimer { font-size: 0.75rem; color: var(--muted); background: var(--amber-bg); border: 1px solid rgba(217,119,6,0.2); border-radius: 0.375rem; padding: 0.5rem 0.85rem; margin-bottom: 2.5rem; display: inline-block; }
+
+    /* FEATURED POST */
+    .featured-post {
+      background: var(--navy); border-radius: 0.75rem; padding: 2.5rem;
+      margin-bottom: 2rem; position: relative; overflow: hidden;
+    }
+    .featured-post::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(to right, var(--accent), var(--accent2));
+    }
+    .fp-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem; }
+    .fp-date { font-size: 0.8rem; color: rgba(255,255,255,0.5); font-family: var(--mono); margin-bottom: 1rem; }
+    .fp-title { font-family: 'Lora', serif; font-size: 1.6rem; font-weight: 600; color: white; margin-bottom: 1rem; line-height: 1.3; }
+    .fp-body { font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.8; margin-bottom: 1.5rem; }
+    .fp-body p { margin-bottom: 1rem; }
+    .fp-body p:last-child { margin-bottom: 0; }
+
+    /* MARKET SNAPSHOT */
+    .snapshot-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; margin: 1.5rem 0; }
+    .snap-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; padding: 0.85rem 1rem; }
+    .snap-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
+    .snap-val { font-family: var(--mono); font-size: 1.1rem; font-weight: 600; color: white; }
+    .snap-chg { font-size: 0.72rem; font-weight: 600; margin-top: 0.2rem; }
+    .pos { color: #34D399; }
+    .neg { color: #f87171; }
+    .flat { color: rgba(255,255,255,0.4); }
+
+    /* WATCHING SECTION */
+    .watching-list { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.5rem 0; }
+    .watch-item { display: flex; gap: 1rem; align-items: flex-start; background: rgba(255,255,255,0.05); border-radius: 0.5rem; padding: 0.85rem 1rem; border: 1px solid rgba(255,255,255,0.08); }
+    .watch-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .watch-title { font-size: 0.85rem; font-weight: 600; color: white; margin-bottom: 0.2rem; }
+    .watch-body { font-size: 0.78rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+    /* TAGS */
+    .fp-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag { font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 1rem; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+
+    /* DIVIDER */
+    .divider { height: 1px; background: var(--warm); margin: 2.5rem 0; }
+
+    /* ARCHIVE */
+    .archive-title { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; margin-bottom: 1.25rem; }
+    .archive-list { display: flex; flex-direction: column; gap: 1rem; }
+    .archive-item {
+      background: var(--white); border: 1px solid var(--warm);
+      border-radius: 0.625rem; padding: 1.25rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 1rem; transition: box-shadow 0.2s;
+      text-decoration: none; color: inherit;
+    }
+    .archive-item:hover { box-shadow: 0 4px 16px rgba(43,37,32,0.08); }
+    .ai-left { flex: 1; }
+    .ai-date { font-size: 0.72rem; font-family: var(--mono); color: var(--muted); margin-bottom: 0.4rem; }
+    .ai-title { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 0.3rem; }
+    .ai-preview { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+    .ai-right { font-size: 0.8rem; color: var(--accent); font-weight: 600; white-space: nowrap; margin-top: 0.2rem; }
+
+    /* SUBSCRIBE NOTE */
+    .subscribe-box {
+      background: var(--white); border: 1px solid var(--warm);
+      border-radius: 0.75rem; padding: 1.75rem 2rem; margin-top: 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .sub-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .sub-body { font-size: 0.82rem; color: var(--muted); max-width: 400px; line-height: 1.6; }
+    .sub-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .sub-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.25rem;
+      border-radius: 0.375rem; text-decoration: none; transition: all 0.2s;
+    }
+    .sub-link-primary { background: var(--accent); color: white; }
+    .sub-link-primary:hover { background: #254f78; }
+    .sub-link-outline { border: 1.5px solid var(--stone); color: var(--ink); }
+    .sub-link-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* BACK */
+    .back-wrap { margin-top: 2rem; }
+    .back-link { font-size: 0.85rem; font-weight: 600; color: var(--accent); text-decoration: none; }
+    .back-link:hover { color: #254f78; }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      .page { padding: 7rem 1.25rem 3rem; }
+      .featured-post { padding: 1.5rem; }
+      .snapshot-grid { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Forrest Knowland</a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="resume.html">Resume</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <p class="eyebrow">Market Commentary</p>
+  <h1 class="page-title">Monthly <em>market digest.</em></h1>
+  <p class="page-sub">My take on what's happening in markets, rates, and the San Diego economy. Written from the perspective of someone who works in financial services and pays attention.</p>
+  <div class="disclaimer">⚠️ Personal opinions only. Not financial advice. Always do your own research.</div>
+
+  <!-- FEATURED / LATEST POST -->
+  <div class="featured-post">
+    <div class="fp-label">Latest Entry</div>
+    <div class="fp-date">June 2026</div>
+    <div class="fp-title">Rates are easing — but San Diego buyers aren't feeling it yet</div>
+
+    <!-- MARKET SNAPSHOT -->
+    <div class="snapshot-grid">
+      <div class="snap-card">
+        <div class="snap-label">30-yr Fixed</div>
+        <div class="snap-val">6.69%</div>
+        <div class="snap-chg neg">▼ from 7.04% in Jan</div>
+      </div>
+      <div class="snap-card">
+        <div class="snap-label">10-yr Treasury</div>
+        <div class="snap-val">4.22%</div>
+        <div class="snap-chg flat">Holding steady</div>
+      </div>
+      <div class="snap-card">
+        <div class="snap-label">SD Median Price</div>
+        <div class="snap-val">$895K</div>
+        <div class="snap-chg neg">▲ +6.2% yr/yr</div>
+      </div>
+    </div>
+
+    <div class="fp-body">
+      <p>Mortgage rates have come down meaningfully since January — we've gone from 7.04% to 6.69% on the 30-year fixed, which on a $700K loan is about $160 less per month. That's real money. But here in San Diego, median home prices have climbed another 6% year over year, which more than erases the payment relief most buyers were hoping for.</p>
+      <p>The Fed has held rates steady through the first half of 2026, and futures markets are pricing in one or two cuts before year end. If that plays out, we could see 30-year rates approach the mid-6s by Q4. That would help at the margins — but with San Diego inventory still extremely tight, I don't expect prices to soften much even if rates drop another half point.</p>
+      <p>The most interesting dynamic right now is the mortgage spread — the gap between the 30-year fixed and the 10-year Treasury. Historically that spread runs around 170 basis points. It's been running wider than normal for most of 2025-2026, which means there's room for mortgage rates to drop even without the Fed cutting if credit markets normalize. That's worth watching.</p>
+      <p>For San Diego specifically: if you're waiting for rates to drop before buying, you may be waiting for something that doesn't help as much as you think. The city has a structural supply problem that rate cuts won't solve.</p>
+    </div>
+
+    <!-- WHAT I'M WATCHING -->
+    <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.75rem;">What I'm watching this month</div>
+    <div class="watching-list">
+      <div class="watch-item">
+        <div class="watch-icon">📊</div>
+        <div>
+          <div class="watch-title">Fed meeting — July 2026</div>
+          <div class="watch-body">Markets are pricing a 65% chance of a hold at the July meeting. Any surprise cut would immediately move mortgage rates. I'll be watching the language around inflation more than the rate decision itself.</div>
+        </div>
+      </div>
+      <div class="watch-item">
+        <div class="watch-icon">🏠</div>
+        <div>
+          <div class="watch-title">San Diego inventory levels</div>
+          <div class="watch-body">Active listings in SD are still near historic lows. Any meaningful uptick in supply would be more impactful for affordability than a rate cut. I'm tracking this monthly via Redfin data.</div>
+        </div>
+      </div>
+      <div class="watch-item">
+        <div class="watch-icon">📈</div>
+        <div>
+          <div class="watch-title">OUST earnings — Q2 2026</div>
+          <div class="watch-body">Ouster reports next month. With the stock up 16% recently on defense contract news, I want to see if revenue growth is accelerating beyond automotive into industrial and defense verticals.</div>
+        </div>
+      </div>
+      <div class="watch-item">
+        <div class="watch-icon">💰</div>
+        <div>
+          <div class="watch-title">PCE inflation print</div>
+          <div class="watch-body">The Fed's preferred inflation measure. A hot print pushes rate cut expectations further out and keeps mortgage rates elevated. A cool print could be the catalyst for rates to break below 6.5%.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fp-tags">
+      <span class="tag">Mortgage Rates</span>
+      <span class="tag">San Diego Housing</span>
+      <span class="tag">Fed Policy</span>
+      <span class="tag">Treasury Yields</span>
+      <span class="tag">Equity Markets</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ARCHIVE -->
+  <h2 class="archive-title">Previous entries</h2>
+  <div class="archive-list">
+
+    <div class="archive-item" onclick="toggleEntry('may')" style="cursor:pointer;display:block;">
+      <div class="ai-left">
+        <div class="ai-date">May 2026</div>
+        <div class="ai-title">The spread is the story: why mortgage rates aren't following the Treasury down</div>
+        <div class="ai-preview">Even as the 10-year Treasury dipped to 4.27%, mortgage rates barely budged. The culprit is a wider-than-normal mortgage spread...</div>
+      </div>
+      <span class="ai-right" id="may-toggle">Read more ↓</span>
+    </div>
+    <div id="may-entry" style="display:none; background:var(--white); border:1px solid var(--warm); border-top:none; border-radius:0 0 0.625rem 0.625rem; padding:1.25rem 1.5rem; margin-top:-1rem; margin-bottom:0.5rem;">
+      <div style="font-size:0.72rem;font-family:var(--mono);color:var(--muted);margin-bottom:1rem;">May 2026</div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;margin-bottom:1.25rem;">
+        <div style="background:var(--sand);border:1px solid var(--warm);border-radius:0.5rem;padding:0.75rem;">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">30-yr Fixed</div>
+          <div style="font-family:var(--mono);font-size:1rem;font-weight:600;">6.74%</div>
+          <div style="font-size:0.68rem;color:var(--green);">▼ down from 6.82%</div>
+        </div>
+        <div style="background:var(--sand);border:1px solid var(--warm);border-radius:0.5rem;padding:0.75rem;">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">10-yr Treasury</div>
+          <div style="font-family:var(--mono);font-size:1rem;font-weight:600;">4.27%</div>
+          <div style="font-size:0.68rem;color:var(--muted);">Gradual decline</div>
+        </div>
+        <div style="background:var(--sand);border:1px solid var(--warm);border-radius:0.5rem;padding:0.75rem;">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">Spread</div>
+          <div style="font-family:var(--mono);font-size:1rem;font-weight:600;">247 bps</div>
+          <div style="font-size:0.68rem;color:var(--red);">Above historical avg</div>
+        </div>
+      </div>
+
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;margin-bottom:0.85rem;">One of the most overlooked dynamics in the mortgage market right now is the spread between the 30-year fixed rate and the 10-year Treasury yield. Historically that gap runs around 150 to 170 basis points. Right now it's sitting closer to 247 basis points — and that difference matters more than most people realize.</p>
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;margin-bottom:0.85rem;">What this means practically is that mortgage rates are being kept artificially high relative to Treasury yields. Even if the Fed cuts rates and the 10-year comes down, borrowers won't feel the full benefit until that spread normalizes. The spread is wide partly because of prepayment risk — when rates fall, homeowners refinance, which hurts mortgage-backed security investors — and partly because of continued uncertainty in credit markets.</p>
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;margin-bottom:0.85rem;">The good news is that spreads do compress over time, and if inflation continues cooling, we could see a double benefit: lower Treasury yields AND a tightening spread. That combination could push the 30-year below 6% faster than most forecasters expect.</p>
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;">For anyone watching the mortgage market — and from my seat at Guild Mortgage I watch it closely — the spread is the number I check before the headline rate. It tells you more about where we're actually headed.</p>
+    </div>
+
+    <div class="archive-item" onclick="toggleEntry('apr')" style="cursor:pointer;display:block;">
+      <div class="ai-left">
+        <div class="ai-date">April 2026</div>
+        <div class="ai-title">North Park vs El Cajon: a tale of two San Diego housing markets</div>
+        <div class="ai-preview">With a $380K price gap between these two neighborhoods, the affordability story in San Diego isn't one story — it's dozens...</div>
+      </div>
+      <span class="ai-right" id="apr-toggle">Read more ↓</span>
+    </div>
+    <div id="apr-entry" style="display:none; background:var(--white); border:1px solid var(--warm); border-top:none; border-radius:0 0 0.625rem 0.625rem; padding:1.25rem 1.5rem; margin-top:-1rem; margin-bottom:0.5rem;">
+      <div style="font-size:0.72rem;font-family:var(--mono);color:var(--muted);margin-bottom:1rem;">April 2026</div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.6rem;margin-bottom:1.25rem;">
+        <div style="background:var(--sand);border:1px solid var(--warm);border-radius:0.5rem;padding:0.75rem;">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">North Park Median</div>
+          <div style="font-family:var(--mono);font-size:1rem;font-weight:600;">$925,000</div>
+          <div style="font-size:0.68rem;color:var(--red);">Need $178K/yr to qualify</div>
+        </div>
+        <div style="background:var(--sand);border:1px solid var(--warm);border-radius:0.5rem;padding:0.75rem;">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">El Cajon Median</div>
+          <div style="font-family:var(--mono);font-size:1rem;font-weight:600;">$545,000</div>
+          <div style="font-size:0.68rem;color:var(--amber);">Need $105K/yr to qualify</div>
+        </div>
+      </div>
+
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;margin-bottom:0.85rem;">When people talk about San Diego's housing affordability crisis, they're usually talking about one number — the countywide median price of around $895,000. But that single number hides an enormous amount of variation. North Park and El Cajon are both San Diego — and they're separated by $380,000 in median home prices and roughly $73,000 in annual income requirements to qualify for a mortgage.</p>
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;margin-bottom:0.85rem;">North Park has become one of the most in-demand neighborhoods in the county. Walkability, restaurants, proximity to Balboa Park — it checks every box for the young professional demographic. But a median price of $925,000 at today's rates puts monthly payments north of $6,000 before taxes and insurance. You need a household income approaching $180,000 to make that work on paper.</p>
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;margin-bottom:0.85rem;">El Cajon tells a different story. At $545,000 median, monthly payments are around $2,900 on a 20% down purchase at today's rates. That's still not cheap — you need roughly $105,000 in household income — but it's within reach for dual-income households and puts homeownership on the table for people the rest of the county has priced out.</p>
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;">The point isn't that one neighborhood is better than the other. It's that San Diego's affordability crisis is really a dozen different crises depending on where you're looking. Anyone advising clients on real estate or financial planning in this market needs to understand that nuance.</p>
+    </div>
+
+    <div class="archive-item" onclick="toggleEntry('mar')" style="cursor:pointer;display:block;">
+      <div class="ai-left">
+        <div class="ai-date">March 2026</div>
+        <div class="ai-title">Why I'm watching Agora (API) while everyone else looks at the Mag 7</div>
+        <div class="ai-preview">Five consecutive quarters of GAAP profitability at 2.7x sales with a 4.58 current ratio. The AI agent pivot is real and the valuation hasn't caught up yet...</div>
+      </div>
+      <span class="ai-right" id="mar-toggle">Read more ↓</span>
+    </div>
+    <div id="mar-entry" style="display:none; background:var(--white); border:1px solid var(--warm); border-top:none; border-radius:0 0 0.625rem 0.625rem; padding:1.25rem 1.5rem; margin-top:-1rem; margin-bottom:0.5rem;">
+      <div style="font-size:0.72rem;font-family:var(--mono);color:var(--muted);margin-bottom:1rem;">March 2026</div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;margin-bottom:1.25rem;">
+        <div style="background:var(--sand);border:1px solid var(--warm);border-radius:0.5rem;padding:0.75rem;">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">API Price</div>
+          <div style="font-family:var(--mono);font-size:1rem;font-weight:600;">~$4.20</div>
+          <div style="font-size:0.68rem;color:var(--green);">P/S: 2.7x</div>
+        </div>
+        <div style="background:var(--sand);border:1px solid var(--warm);border-radius:0.5rem;padding:0.75rem;">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">Gross Margin</div>
+          <div style="font-family:var(--mono);font-size:1rem;font-weight:600;">66.4%</div>
+          <div style="font-size:0.68rem;color:var(--green);">5 qtrs profitable</div>
+        </div>
+        <div style="background:var(--sand);border:1px solid var(--warm);border-radius:0.5rem;padding:0.75rem;">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">Current Ratio</div>
+          <div style="font-family:var(--mono);font-size:1rem;font-weight:600;">4.58x</div>
+          <div style="font-size:0.68rem;color:var(--green);">Very strong balance sheet</div>
+        </div>
+      </div>
+
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;margin-bottom:0.85rem;">Everyone in finance is talking about Nvidia, Microsoft, and the rest of the Magnificent 7. That's fine — those are great businesses. But the most interesting risk/reward setups are usually found where nobody is looking, and right now I think Agora (API) is one of the more compelling small-cap setups in the AI space.</p>
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;margin-bottom:0.85rem;">Agora just completed its fifth consecutive quarter of GAAP profitability. That's genuinely rare for a growth software company at this stage. Meanwhile the stock trades at about 2.7x sales with a current ratio of 4.58 — meaning they have nearly five times as much in current assets as current liabilities. The balance sheet is fortress-level for a company this size.</p>
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;margin-bottom:0.85rem;">The pivot to Conversational AI Agents — essentially voice-powered automation for customer service and sales workflows — is perfectly timed. Every company is trying to figure out how to deploy AI agents right now and Agora has the real-time communication infrastructure to actually build them. The revenue growth is only 13% year over year which isn't headline-grabbing, but the profitability trajectory and balance sheet discipline make it worth watching closely.</p>
+      <p style="font-size:0.88rem;color:var(--ink);line-height:1.8;">This is the kind of company that doesn't get written up in the mainstream financial press until it's already moved 50%. Analyst consensus target is around $6.17 against a current price near $4.20 — about 47% implied upside if they're right. I'm watching it.</p>
+    </div>
+
+    <script>
+      function toggleEntry(id) {
+        const entry = document.getElementById(id + '-entry');
+        const toggle = document.getElementById(id + '-toggle');
+        if (entry.style.display === 'none') {
+          entry.style.display = 'block';
+          toggle.textContent = 'Close ↑';
+        } else {
+          entry.style.display = 'none';
+          toggle.textContent = 'Read more ↓';
+        }
+      }
+    </script>
+
+  </div>
+
+  <!-- SUBSCRIBE / CONNECT -->
+  <div class="subscribe-box">
+    <div>
+      <div class="sub-title">Want to discuss markets?</div>
+      <div class="sub-body">I publish a new entry every month. If you work in finance or are hiring in the San Diego area, I'd love to connect.</div>
+    </div>
+    <div class="sub-links">
+      <a href="https://www.linkedin.com/in/forrestknowland" target="_blank" class="sub-link sub-link-primary">Connect on LinkedIn</a>
+      <a href="index.html#contact" class="sub-link sub-link-outline">Get in touch</a>
+    </div>
+  </div>
+
+  <div class="back-wrap">
+    <a href="index.html" class="back-link">← Back to portfolio</a>
+  </div>
+
+</div>
+
+</body>
+</html>
