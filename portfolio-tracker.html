@@ -118,7 +118,19 @@
     .metric-val.bad  { color: var(--red); }
 
     /* MINI CHART */
-    .mini-chart-wrap { height: 80px; margin-bottom: 0.85rem; }
+    .bar-spark {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 50px;
+      margin-bottom: 1rem;
+    }
+    .bar-spark-bar {
+      flex: 1;
+      min-width: 0;
+      border-radius: 1px 1px 0 0;
+      min-height: 3px;
+    }
 
     /* REVENUE BAR CHART */
     .rev-bars { display: flex; align-items: flex-end; gap: 0.3rem; height: 60px; margin-bottom: 0.4rem; overflow: visible; }
@@ -291,11 +303,13 @@
           <div class="metric-box"><div class="metric-label">52W Low</div><div class="metric-val">$6.47</div></div>
           <div class="metric-box"><div class="metric-label">52W High</div><div class="metric-val">$20.18</div></div>
         </div>
-        <div style="height:80px;margin-bottom:0.85rem;position:relative;overflow:hidden;"><canvas id="mblySpark"></canvas></div>
-        <div style="margin-bottom:0.85rem;">
-          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
-          <div class="rev-bars" id="mblyRevBars"></div>
-        </div>
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Price Trend</div>
+        <div class="bar-spark" id="mblySpark"></div>
+
+        <div style="border-top:1px solid var(--border);margin-bottom:1rem;"></div>
+
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Revenue Trajectory ($M)</div>
+        <div class="rev-bars" id="mblyRevBars" style="margin-bottom:0.85rem;"></div>
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
           <div class="thesis-text">Mobileye is the ADAS infrastructure layer inside 800M+ cars globally. Q1 2026 showed 27% revenue growth driven by Chinese OEM exports and Western ADAS adoption, but the stock has sold off hard since, down nearly 20% from where I first tracked it. Jefferies initiated coverage at Underperform with an $8 target, which lines up with where the stock sits now. The real option here is still SuperVision and robotaxi. If even one major OEM scales it, the current price looks cheap relative to the 15 analysts who still rate it a buy with an average target near $13. Risk: Intel spinout overhang, Chinese competition from Momenta and Huawei, and now bearish sentiment from at least one major shop.</div>
@@ -339,11 +353,13 @@
           <div class="metric-box"><div class="metric-label">Fin. Strength</div><div class="metric-val good">8/10</div></div>
           <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val warn">$46.86</div></div>
         </div>
-        <div style="height:80px;margin-bottom:0.85rem;position:relative;overflow:hidden;"><canvas id="oustSpark"></canvas></div>
-        <div style="margin-bottom:0.85rem;">
-          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
-          <div class="rev-bars" id="oustRevBars"></div>
-        </div>
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Price Trend</div>
+        <div class="bar-spark" id="oustSpark"></div>
+
+        <div style="border-top:1px solid var(--border);margin-bottom:1rem;"></div>
+
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Revenue Trajectory ($M)</div>
+        <div class="rev-bars" id="oustRevBars" style="margin-bottom:0.85rem;"></div>
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
           <div class="thesis-text">Ouster is positioning itself as the "eyes of Physical AI." Rev8 digital lidar combines depth and color on one chip, which is genuine hardware innovation. 52% revenue growth with a debt-free balance sheet is rare at this stage. The stock has run up sharply on partnership news with AIM Intelligent Machines and FieldAI, plus a Roth Capital initiation at Buy with a $75 price target. It's now trading well above the older consensus target, so the easy money may be made. Worth watching for a pullback before adding. Insider selling has also picked up, which is worth tracking.</div>
@@ -394,11 +410,13 @@
           <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val good">2.7x</div></div>
           <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$6.17</div></div>
         </div>
-        <div style="height:80px;margin-bottom:0.85rem;position:relative;overflow:hidden;"><canvas id="apiSpark"></canvas></div>
-        <div style="margin-bottom:0.85rem;">
-          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
-          <div class="rev-bars" id="apiRevBars"></div>
-        </div>
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Price Trend</div>
+        <div class="bar-spark" id="apiSpark"></div>
+
+        <div style="border-top:1px solid var(--border);margin-bottom:1rem;"></div>
+
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Revenue Trajectory ($M)</div>
+        <div class="rev-bars" id="apiRevBars" style="margin-bottom:0.85rem;"></div>
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
           <div class="thesis-text">Agora just posted its sixth consecutive quarter of GAAP profitability, which is genuinely rare for a growth software company. The pivot toward Conversational AI Agents, basically voice automation for customer service and sales, lines up well with where the broader AI market is heading. Trading at around 2.7x sales with a 4.58 current ratio, the balance sheet is strong enough that I don't worry about dilution risk here. BofA trimmed its price target slightly to $6.60 in June, but it's still a Buy rating. I'm watching for the AI product line to actually move the revenue growth rate, which has been steady but not yet accelerating.</div>
@@ -442,11 +460,13 @@
           <div class="metric-box"><div class="metric-label">Fwd P/S</div><div class="metric-val good">2.2x</div></div>
           <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$10.65</div></div>
         </div>
-        <div style="height:80px;margin-bottom:0.85rem;position:relative;overflow:hidden;"><canvas id="amplSpark"></canvas></div>
-        <div style="margin-bottom:0.85rem;">
-          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
-          <div class="rev-bars" id="amplRevBars"></div>
-        </div>
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Price Trend</div>
+        <div class="bar-spark" id="amplSpark"></div>
+
+        <div style="border-top:1px solid var(--border);margin-bottom:1rem;"></div>
+
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Revenue Trajectory ($M)</div>
+        <div class="rev-bars" id="amplRevBars" style="margin-bottom:0.85rem;"></div>
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
           <div class="thesis-text">Amplitude has gotten cheaper since I first flagged it, now down to about $7 a share after BofA downgraded the stock to Neutral on margin pressure from AI inference costs. Q1 2026 revenue still grew 17% YoY to $93.5M and beat estimates, but the company cut its FY26 EPS outlook, which spooked the market. The Statsig partnership and AI product push are real, and at roughly 2x forward sales this is about as cheap as Amplitude has ever traded relative to its growth rate. The CTO selling shares under a pre-set trading plan isn't a red flag on its own, but the stock needs a clean quarter to rebuild confidence. Higher risk than when I first added it, but the valuation argument got stronger, not weaker.</div>
@@ -490,11 +510,13 @@
           <div class="metric-box"><div class="metric-label">EV/Rev</div><div class="metric-val good">1.32x</div></div>
           <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$5.55</div></div>
         </div>
-        <div style="height:80px;margin-bottom:0.85rem;position:relative;overflow:hidden;"><canvas id="rskdSpark"></canvas></div>
-        <div style="margin-bottom:0.85rem;">
-          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
-          <div class="rev-bars" id="rskdRevBars"></div>
-        </div>
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Price Trend</div>
+        <div class="bar-spark" id="rskdSpark"></div>
+
+        <div style="border-top:1px solid var(--border);margin-bottom:1rem;"></div>
+
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Revenue Trajectory ($M)</div>
+        <div class="rev-bars" id="rskdRevBars" style="margin-bottom:0.85rem;"></div>
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
           <div class="thesis-text">Riskified processes more than $37B in GMV and is getting closer to consistent profitability. Adjusted EBITDA jumped 370% year over year in Q1 2026. Trading at 1.32x EV to revenue with $276M in cash, which is nearly 40% of the market cap, this looks like a real value setup rather than just a cheap stock. The board just expanded the buyback to $75M on top of what they'd already spent, which tells me management thinks the stock is undervalued too. The agentic commerce angle, basically fraud protection for AI-driven shopping, gives this a longer runway than people give it credit for. Most analysts don't cover this one closely, which is part of why I like it.</div>
@@ -609,25 +631,15 @@ const TABS = {
 
 // ── SPARKLINES ───────────────────────────────────────────────
 function buildSpark(id, data, color) {
-  const ctx = document.getElementById(id);
-  if (!ctx) return;
-  ctx.style.height = '80px';
-  ctx.style.maxHeight = '80px';
-  new Chart(ctx, {
-    type:'line',
-    data:{
-      labels: data.map((_,i)=>i),
-      datasets:[{
-        data, borderColor:color, backgroundColor:`${color}15`,
-        borderWidth:1.5, pointRadius:0, tension:0.4, fill:true
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{enabled:false}},
-      scales:{x:{display:false},y:{display:false}}
-    }
-  });
+  const el = document.getElementById(id);
+  if (!el) return;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = (max - min) || 1;
+  el.innerHTML = data.map(v => {
+    const pct = ((v - min) / range) * 80 + 20;
+    return `<div class="bar-spark-bar" style="height:${pct}%;background:${color};opacity:0.55"></div>`;
+  }).join('');
 }
 
 // ── REVENUE BARS ─────────────────────────────────────────────
