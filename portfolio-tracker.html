@@ -121,9 +121,9 @@
     .mini-chart-wrap { height: 80px; margin-bottom: 0.85rem; }
 
     /* REVENUE BAR CHART */
-    .rev-bars { display: flex; align-items: flex-end; gap: 0.3rem; height: 60px; margin-bottom: 0.4rem; }
-    .rev-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
-    .rev-bar { width: 100%; background: var(--blue); border-radius: 2px 2px 0 0; min-height: 4px; transition: height 0.5s ease; }
+    .rev-bars { display: flex; align-items: flex-end; gap: 0.3rem; height: 60px; margin-bottom: 0.4rem; overflow: visible; }
+    .rev-bar-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+    .rev-bar { width: 100%; max-width: 100%; box-sizing: border-box; background: var(--blue); border-radius: 2px 2px 0 0; min-height: 4px; transition: height 0.5s ease; }
     .rev-bar.projected { background: rgba(26,86,219,0.3); border: 1px dashed var(--blue); }
     .rev-bar-label { font-size: 0.58rem; color: var(--muted); font-family: var(--mono); }
 
@@ -189,6 +189,14 @@
       .alloc-wrap { grid-template-columns: 1fr; }
       header { padding: 0 1rem; }
       .page { padding: 1rem; }
+    }
+    @media (max-width: 480px) {
+      .metrics-row { grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+      .metric-box { padding: 0.5rem 0.6rem; }
+      .metric-val { font-size: 0.8rem; }
+      .sc-header { flex-direction: column; gap: 0.5rem; }
+      .sc-right { text-align: left; }
+      .rev-bar-label { font-size: 0.52rem; }
     }
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
   </style>
@@ -283,7 +291,7 @@
           <div class="metric-box"><div class="metric-label">52W Low</div><div class="metric-val">$6.47</div></div>
           <div class="metric-box"><div class="metric-label">52W High</div><div class="metric-val">$20.18</div></div>
         </div>
-        <div style="height:80px;margin-bottom:0.85rem;"><canvas id="mblySpark"></canvas></div>
+        <div style="height:80px;margin-bottom:0.85rem;position:relative;overflow:hidden;"><canvas id="mblySpark"></canvas></div>
         <div style="margin-bottom:0.85rem;">
           <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
           <div class="rev-bars" id="mblyRevBars"></div>
@@ -331,7 +339,7 @@
           <div class="metric-box"><div class="metric-label">Fin. Strength</div><div class="metric-val good">8/10</div></div>
           <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val warn">$46.86</div></div>
         </div>
-        <div style="height:80px;margin-bottom:0.85rem;"><canvas id="oustSpark"></canvas></div>
+        <div style="height:80px;margin-bottom:0.85rem;position:relative;overflow:hidden;"><canvas id="oustSpark"></canvas></div>
         <div style="margin-bottom:0.85rem;">
           <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
           <div class="rev-bars" id="oustRevBars"></div>
@@ -386,14 +394,14 @@
           <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val good">2.7x</div></div>
           <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$6.17</div></div>
         </div>
-        <div style="height:80px;margin-bottom:0.85rem;"><canvas id="apiSpark"></canvas></div>
+        <div style="height:80px;margin-bottom:0.85rem;position:relative;overflow:hidden;"><canvas id="apiSpark"></canvas></div>
         <div style="margin-bottom:0.85rem;">
           <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
           <div class="rev-bars" id="apiRevBars"></div>
         </div>
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
-          <div class="thesis-text">Agora just completed its 5th consecutive quarter of GAAP profitability — rare for a growth SaaS company. The pivot to Conversational AI Agents (voice automation for customer service, sales) is perfectly timed with the AI wave. Trading at ~2.7x sales with a 4.58 current ratio is deeply undervalued if the AI product line accelerates. Upside: +58% to analyst consensus target.</div>
+          <div class="thesis-text">Agora just posted its sixth consecutive quarter of GAAP profitability, which is genuinely rare for a growth software company. The pivot toward Conversational AI Agents, basically voice automation for customer service and sales, lines up well with where the broader AI market is heading. Trading at around 2.7x sales with a 4.58 current ratio, the balance sheet is strong enough that I don't worry about dilution risk here. BofA trimmed its price target slightly to $6.60 in June, but it's still a Buy rating. I'm watching for the AI product line to actually move the revenue growth rate, which has been steady but not yet accelerating.</div>
         </div>
         <div class="rating-row">
           <span class="rating-badge r-buy">⭐ High Conviction</span>
@@ -434,7 +442,7 @@
           <div class="metric-box"><div class="metric-label">Fwd P/S</div><div class="metric-val good">2.2x</div></div>
           <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$10.65</div></div>
         </div>
-        <div style="height:80px;margin-bottom:0.85rem;"><canvas id="amplSpark"></canvas></div>
+        <div style="height:80px;margin-bottom:0.85rem;position:relative;overflow:hidden;"><canvas id="amplSpark"></canvas></div>
         <div style="margin-bottom:0.85rem;">
           <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
           <div class="rev-bars" id="amplRevBars"></div>
@@ -482,14 +490,14 @@
           <div class="metric-box"><div class="metric-label">EV/Rev</div><div class="metric-val good">1.32x</div></div>
           <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$5.55</div></div>
         </div>
-        <div style="height:80px;margin-bottom:0.85rem;"><canvas id="rskdSpark"></canvas></div>
+        <div style="height:80px;margin-bottom:0.85rem;position:relative;overflow:hidden;"><canvas id="rskdSpark"></canvas></div>
         <div style="margin-bottom:0.85rem;">
           <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;">Revenue Trajectory ($M)</div>
           <div class="rev-bars" id="rskdRevBars"></div>
         </div>
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
-          <div class="thesis-text">Riskified processes $37B+ GMV and is approaching profitability — Adj. EBITDA surged 370% YoY in Q1 2026. Trading at 1.32x EV/Revenue with $276M cash on hand (nearly 40% of market cap) is a compelling value setup. The ACH fraud intelligence and agentic commerce play expands the TAM significantly. Niche pick: most analysts don't cover this one closely.</div>
+          <div class="thesis-text">Riskified processes more than $37B in GMV and is getting closer to consistent profitability. Adjusted EBITDA jumped 370% year over year in Q1 2026. Trading at 1.32x EV to revenue with $276M in cash, which is nearly 40% of the market cap, this looks like a real value setup rather than just a cheap stock. The board just expanded the buyback to $75M on top of what they'd already spent, which tells me management thinks the stock is undervalued too. The agentic commerce angle, basically fraud protection for AI-driven shopping, gives this a longer runway than people give it credit for. Most analysts don't cover this one closely, which is part of why I like it.</div>
         </div>
         <div class="rating-row">
           <span class="rating-badge r-buy">⭐ High Conviction</span>
