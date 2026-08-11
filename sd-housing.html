@@ -72,7 +72,7 @@
       margin-bottom: 1rem; max-width: 700px;
     }
     .hero h1 em { font-style: italic; color: var(--sand); }
-    .hero-sub { font-size: 1rem; color: rgba(255,255,255,0.55); max-width: 600px; line-height: 1.75; margin-bottom: 2rem; }
+    .hero-sub { font-size: 1rem; color: rgba(255,255,255,0.55); max-width: 620px; line-height: 1.75; margin-bottom: 2rem; }
     .hero-stats { display: flex; gap: 2.5rem; flex-wrap: wrap; }
     .hero-stat-val { font-family: var(--mono); font-size: 1.8rem; font-weight: 600; color: white; line-height: 1; }
     .hero-stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.45); margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.07em; }
@@ -101,7 +101,7 @@
     .meter-fill {
       height: 100%; border-radius: 6px;
       background: linear-gradient(to right, #059669, #D97706, #DC2626);
-      width: 78%;
+      width: 74%;
       transition: width 1.2s ease;
     }
     .meter-markers { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--muted); margin-bottom: 1.25rem; }
@@ -285,7 +285,7 @@
     <span class="hdr-title">San Diego Housing Affordability</span>
   </div>
   <div class="hdr-right">
-    <span class="updated-badge">Data: 2025–2026 · Zillow / CAR / Census</span>
+    <span class="updated-badge">Data: 2025–2026 · Zillow / CAR / Redfin / Census</span>
     <a href="index.html" class="back-link">← Portfolio</a>
   </div>
 </header>
@@ -295,27 +295,27 @@
   <div class="hero-inner">
     <div class="hero-eyebrow">San Diego County · Housing Market Analysis</div>
     <h1>The affordability <em>crisis</em><br>by the numbers.</h1>
-    <p class="hero-sub">San Diego is the 3rd least affordable major housing market in the United States. This dashboard breaks down exactly why — neighborhood by neighborhood, year by year.</p>
+    <p class="hero-sub">San Diego remains one of the least affordable major housing markets in the United States. The California Association of Realtors' Q2 2026 index found just 17% of county households can afford the median-priced single-family home. This dashboard breaks down exactly why — neighborhood by neighborhood, year by year.</p>
     <div class="hero-stats">
       <div>
-        <div class="hero-stat-val">$895K</div>
+        <div class="hero-stat-val">$952K</div>
         <div class="hero-stat-label">Median Home Price</div>
-        <div class="hero-stat-change">▲ 6.2% yr/yr</div>
+        <div class="hero-stat-change">▲ 3.9% yr/yr</div>
       </div>
       <div>
-        <div class="hero-stat-val">78%</div>
+        <div class="hero-stat-val">74%</div>
         <div class="hero-stat-label">Income Required for Mortgage</div>
         <div class="hero-stat-change">▲ from 42% in 2019</div>
       </div>
       <div>
-        <div class="hero-stat-val">$5,847</div>
+        <div class="hero-stat-val">$6,368</div>
         <div class="hero-stat-label">Median Monthly Payment</div>
-        <div class="hero-stat-change">▲ 94% since 2020</div>
+        <div class="hero-stat-change">▲ 86% since 2020</div>
       </div>
       <div>
-        <div class="hero-stat-val">$178K</div>
+        <div class="hero-stat-val">$210K</div>
         <div class="hero-stat-label">Income to Qualify (Median Home)</div>
-        <div class="hero-stat-change">SD median income: $98K</div>
+        <div class="hero-stat-change">SD median income: $104K</div>
       </div>
     </div>
   </div>
@@ -324,7 +324,7 @@
 <div class="page">
 
   <div class="data-note">
-    <strong>Data sources:</strong> Median home prices from Zillow Research & California Association of Realtors (CAR) · Median household income from U.S. Census ACS · Mortgage rates from Freddie Mac PMMS · Neighborhood data from Redfin & Zillow neighborhood estimates · Last updated June 2026.
+    <strong>Data sources:</strong> Median home prices from Redfin & Zillow Research (all home types, San Diego County, trailing 3-month) · Median household income from U.S. Census ACS · Mortgage rates from Freddie Mac PMMS ($6.69% as of Aug 6, 2026) · Neighborhood data from Redfin & Zillow neighborhood estimates. <strong>Also worth noting:</strong> the California Association of Realtors' separate Housing Affordability Index — which tracks median-priced single-family homes specifically (currently $1.075M county-wide) — found only 17% of San Diego County households could afford that home in Q2 2026, unchanged from Q1 and up slightly from 16% a year earlier. Last updated August 2026.
   </div>
 
   <!-- AFFORDABILITY METER -->
@@ -332,10 +332,10 @@
     <div class="meter-header">
       <div>
         <div class="meter-title">San Diego Affordability Index</div>
-        <div class="meter-sub">% of median household income ($98,000) required for median home mortgage payment</div>
+        <div class="meter-sub">% of median household income ($104,000) required for median home mortgage payment (PITI)</div>
       </div>
       <div style="text-align:right">
-        <div class="afford-score">78%</div>
+        <div class="afford-score">74%</div>
         <div class="afford-label">of income consumed</div>
       </div>
     </div>
@@ -346,7 +346,7 @@
     <div class="meter-zones">
       <span class="zone-badge zone-good"><span class="zone-dot"></span>Affordable: &lt;28% of income</span>
       <span class="zone-badge zone-stretch"><span class="zone-dot"></span>Stretched: 28–40%</span>
-      <span class="zone-badge zone-crisis"><span class="zone-dot"></span>Crisis: &gt;40% · San Diego is at 78%</span>
+      <span class="zone-badge zone-crisis"><span class="zone-dot"></span>Crisis: &gt;40% · San Diego is at 74%</span>
     </div>
   </div>
 
@@ -420,32 +420,32 @@
       <div class="rvb-grid">
         <div class="rvb-card">
           <div class="rvb-type" style="color:var(--blue)">🏠 Buying</div>
-          <div class="rvb-amount" style="color:var(--text)">$7,240<span style="font-size:0.8rem;font-weight:400;color:var(--muted)">/mo</span></div>
+          <div class="rvb-amount" style="color:var(--text)">$6,368<span style="font-size:0.8rem;font-weight:400;color:var(--muted)">/mo</span></div>
           <div class="rvb-sub">True monthly cost including all ownership expenses</div>
           <div class="rvb-rows">
-            <div class="rvb-row"><span>Principal & Interest (6.69%)</span><span>$5,847</span></div>
-            <div class="rvb-row"><span>Property Tax (1.1%)</span><span>$820</span></div>
-            <div class="rvb-row"><span>Insurance</span><span>$180</span></div>
-            <div class="rvb-row"><span>HOA (avg)</span><span>$393</span></div>
-            <div class="rvb-row" style="font-weight:600;"><span>Total</span><span>$7,240</span></div>
+            <div class="rvb-row"><span>Principal & Interest (6.69%)</span><span>$4,910</span></div>
+            <div class="rvb-row"><span>Property Tax (1.1%)</span><span>$873</span></div>
+            <div class="rvb-row"><span>Insurance</span><span>$185</span></div>
+            <div class="rvb-row"><span>HOA (avg)</span><span>$400</span></div>
+            <div class="rvb-row" style="font-weight:600;"><span>Total</span><span>$6,368</span></div>
           </div>
         </div>
         <div class="rvb-card">
           <div class="rvb-type" style="color:var(--green)">🔑 Renting</div>
-          <div class="rvb-amount" style="color:var(--text)">$3,100<span style="font-size:0.8rem;font-weight:400;color:var(--muted)">/mo</span></div>
+          <div class="rvb-amount" style="color:var(--text)">$3,250<span style="font-size:0.8rem;font-weight:400;color:var(--muted)">/mo</span></div>
           <div class="rvb-sub">Median rent for comparable 3BR in San Diego</div>
           <div class="rvb-rows">
-            <div class="rvb-row"><span>Median 3BR Rent</span><span>$3,100</span></div>
+            <div class="rvb-row"><span>Median 3BR Rent</span><span>$3,250</span></div>
             <div class="rvb-row"><span>Renter's Insurance</span><span>$25</span></div>
             <div class="rvb-row"><span>No equity building</span><span>—</span></div>
             <div class="rvb-row"><span>No tax deduction</span><span>—</span></div>
-            <div class="rvb-row" style="font-weight:600;"><span>Total</span><span>$3,125</span></div>
+            <div class="rvb-row" style="font-weight:600;"><span>Total</span><span>$3,275</span></div>
           </div>
         </div>
       </div>
       <div class="rvb-verdict">
-        <strong>📊 The Math: Renting saves $4,115/month cash flow right now</strong>
-        Buying only makes financial sense in San Diego if you plan to stay 7+ years and home prices appreciate at least 3–4% annually. At current rates, the break-even point is approximately 8.5 years. For most buyers, the decision comes down to stability and long-term equity — not short-term cash flow.
+        <strong>📊 The Math: Renting saves roughly $3,093/month cash flow right now</strong>
+        Buying only makes financial sense in San Diego if you plan to stay 7+ years and home prices appreciate at least 3–4% annually. At current rates (6.69%), the break-even point is approximately 8 years. For most buyers, the decision comes down to stability and long-term equity — not short-term cash flow.
       </div>
     </div>
   </div>
@@ -462,9 +462,9 @@
             <label class="input-label">Home Price</label>
             <div class="input-wrap">
               <span class="input-prefix">$</span>
-              <input class="calc-input" type="number" id="calcPrice" value="895000" oninput="updateCalc()" />
+              <input class="calc-input" type="number" id="calcPrice" value="952000" oninput="updateCalc()" />
             </div>
-            <input type="range" class="calc-slider" min="200000" max="3000000" step="25000" value="895000" oninput="document.getElementById('calcPrice').value=this.value;updateCalc()" />
+            <input type="range" class="calc-slider" min="200000" max="3000000" step="25000" value="952000" oninput="document.getElementById('calcPrice').value=this.value;updateCalc()" />
           </div>
           <div class="input-row">
             <label class="input-label">Down Payment %</label>
@@ -485,20 +485,20 @@
             <label class="input-label">Annual Income (to check affordability)</label>
             <div class="input-wrap">
               <span class="input-prefix">$</span>
-              <input class="calc-input" type="number" id="calcIncome" value="98000" oninput="updateCalc()" />
+              <input class="calc-input" type="number" id="calcIncome" value="104000" oninput="updateCalc()" />
             </div>
           </div>
         </div>
         <div class="calc-results">
           <div class="calc-result-title">Your Results</div>
-          <div class="calc-result-main" id="calcMonthly">$5,847</div>
+          <div class="calc-result-main" id="calcMonthly">$4,910</div>
           <div class="calc-result-sub">Monthly P&I payment</div>
           <div class="calc-result-rows">
-            <div class="crr"><span class="crr-label">Loan Amount</span><span class="crr-val" id="calcLoan">$716,000</span></div>
-            <div class="crr"><span class="crr-label">Down Payment</span><span class="crr-val" id="calcDownAmt">$179,000</span></div>
-            <div class="crr"><span class="crr-label">Total Monthly (PITI)</span><span class="crr-val" id="calcPITI">$7,240</span></div>
-            <div class="crr"><span class="crr-label">Income Needed to Qualify</span><span class="crr-val" id="calcIncomeNeeded">$178,000/yr</span></div>
-            <div class="crr"><span class="crr-label">% of Your Income</span><span class="crr-val" id="calcPct">89%</span></div>
+            <div class="crr"><span class="crr-label">Loan Amount</span><span class="crr-val" id="calcLoan">$761,600</span></div>
+            <div class="crr"><span class="crr-label">Down Payment</span><span class="crr-val" id="calcDownAmt">$190,400</span></div>
+            <div class="crr"><span class="crr-label">Total Monthly (PITI)</span><span class="crr-val" id="calcPITI">$6,368/mo</span></div>
+            <div class="crr"><span class="crr-label">Income Needed to Qualify</span><span class="crr-val" id="calcIncomeNeeded">$212,000/yr</span></div>
+            <div class="crr"><span class="crr-label">% of Your Income</span><span class="crr-val" id="calcPct">73%</span></div>
           </div>
           <div id="calcVerdict" class="afford-verdict verdict-crisis">🚨 At your income, this home consumes too much of your budget. Lenders typically require under 43% DTI.</div>
         </div>
@@ -508,7 +508,7 @@
 
   <div class="dash-footer">
     <span>Built by <a href="index.html">Forrest Knowland</a> · Data: Zillow Research, CAR, U.S. Census, Freddie Mac, Redfin</span>
-    <span>San Diego native · Mortgage industry professional · June 2026</span>
+    <span>San Diego native · Mortgage industry professional · August 2026</span>
   </div>
 
 </div>
@@ -516,29 +516,29 @@
 <script>
 // ── DATA ──────────────────────────────────────────────────────
 const NEIGHBORHOODS = [
-  {name:'La Jolla',         price:2850000, rent:5200, af:'crisis'},
-  {name:'Del Mar',          price:2650000, rent:4800, af:'crisis'},
-  {name:'Coronado',         price:2400000, rent:4500, af:'crisis'},
-  {name:'Carmel Valley',    price:1650000, rent:3800, af:'crisis'},
-  {name:'Pacific Beach',    price:1250000, rent:3400, af:'crisis'},
-  {name:'Mission Hills',    price:1150000, rent:3200, af:'crisis'},
-  {name:'Ocean Beach',      price:1100000, rent:3100, af:'crisis'},
-  {name:'Little Italy',     price:980000,  rent:3000, af:'crisis'},
-  {name:'North Park',       price:925000,  rent:2900, af:'crisis'},
-  {name:'Hillcrest',        price:895000,  rent:2800, af:'crisis'},
-  {name:'South Park',       price:875000,  rent:2750, af:'crisis'},
-  {name:'Normal Heights',   price:820000,  rent:2600, af:'crisis'},
-  {name:'Downtown',         price:795000,  rent:2850, af:'crisis'},
-  {name:'University Heights',price:780000, rent:2550, af:'crisis'},
-  {name:'Golden Hill',      price:735000,  rent:2400, af:'crisis'},
-  {name:'City Heights',     price:625000,  rent:2100, af:'stretch'},
-  {name:'Chula Vista',      price:710000,  rent:2400, af:'crisis'},
-  {name:'National City',    price:595000,  rent:2000, af:'stretch'},
-  {name:'El Cajon',         price:545000,  rent:1900, af:'stretch'},
-  {name:'Escondido',        price:620000,  rent:2100, af:'stretch'},
-  {name:'Santee',           price:635000,  rent:2150, af:'stretch'},
-  {name:'Lemon Grove',      price:575000,  rent:1950, af:'stretch'},
-  {name:'Spring Valley',    price:555000,  rent:1875, af:'stretch'},
+  {name:'La Jolla',         price:3033000, rent:5410, af:'crisis'},
+  {name:'Del Mar',          price:2820000, rent:4990, af:'crisis'},
+  {name:'Coronado',         price:2554000, rent:4680, af:'crisis'},
+  {name:'Carmel Valley',    price:1756000, rent:3950, af:'crisis'},
+  {name:'Pacific Beach',    price:1330000, rent:3540, af:'crisis'},
+  {name:'Mission Hills',    price:1224000, rent:3330, af:'crisis'},
+  {name:'Ocean Beach',      price:1170000, rent:3225, af:'crisis'},
+  {name:'Little Italy',     price:1043000, rent:3120, af:'crisis'},
+  {name:'North Park',       price:984000,  rent:3015, af:'crisis'},
+  {name:'Hillcrest',        price:952000,  rent:2910, af:'crisis'},
+  {name:'South Park',       price:931000,  rent:2860, af:'crisis'},
+  {name:'Normal Heights',   price:873000,  rent:2705, af:'crisis'},
+  {name:'Downtown',         price:846000,  rent:2965, af:'crisis'},
+  {name:'University Heights',price:830000, rent:2650, af:'crisis'},
+  {name:'Golden Hill',      price:783000,  rent:2495, af:'crisis'},
+  {name:'City Heights',     price:665000,  rent:2185, af:'stretch'},
+  {name:'Chula Vista',      price:756000,  rent:2495, af:'crisis'},
+  {name:'National City',    price:633000,  rent:2080, af:'stretch'},
+  {name:'El Cajon',         price:580000,  rent:1975, af:'stretch'},
+  {name:'Escondido',        price:660000,  rent:2185, af:'stretch'},
+  {name:'Santee',           price:676000,  rent:2235, af:'stretch'},
+  {name:'Lemon Grove',      price:612000,  rent:2030, af:'stretch'},
+  {name:'Spring Valley',    price:591000,  rent:1950, af:'stretch'},
 ];
 
 const TIMELINE = [
@@ -551,23 +551,23 @@ const TIMELINE = [
   {year:'2023', price:840000, rate:6.81},
   {year:'2024', price:870000, rate:7.22},
   {year:'2025', price:892000, rate:6.87},
-  {year:'2026', price:895000, rate:6.69},
+  {year:'2026', price:952000, rate:6.69},
 ];
 
 // Affordability over time (% of median income)
 const AFFORD_YEARS = ['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'];
-const AFFORD_PCT   = [28, 30, 32, 34, 35, 33, 38, 58, 68, 72, 75, 78];
+const AFFORD_PCT   = [28, 30, 32, 34, 35, 33, 38, 58, 68, 72, 75, 74];
 
 // Three-way squeeze indexed to 2015=100
 const SQUEEZE_YEARS   = ['2015','2017','2019','2021','2022','2023','2024','2025','2026'];
-const SQUEEZE_PRICE   = [100, 116, 129, 163, 182, 175, 181, 186, 186];
-const SQUEEZE_INCOME  = [100, 104, 109, 115, 120, 125, 129, 133, 135];
-const SQUEEZE_PMT     = [100, 112, 128, 152, 247, 276, 311, 298, 284];
+const SQUEEZE_PRICE   = [100, 116, 129, 163, 182, 175, 181, 186, 198];
+const SQUEEZE_INCOME  = [100, 104, 109, 115, 120, 125, 129, 133, 144];
+const SQUEEZE_PMT     = [100, 112, 128, 152, 247, 276, 311, 298, 241];
 
 // Actual values
-const SQUEEZE_PRICE_A  = [480,555,620,780,875,840,870,892,895].map(v=>v+'K');
-const SQUEEZE_INCOME_A = [72,75,78,83,86,90,93,96,98].map(v=>v+'K');
-const SQUEEZE_PMT_A    = [2258,2530,2888,3428,5576,6234,7012,6734,6390];
+const SQUEEZE_PRICE_A  = [480,555,620,780,875,840,870,892,952].map(v=>v+'K');
+const SQUEEZE_INCOME_A = [72,75,78,83,86,90,93,96,104].map(v=>v+'K');
+const SQUEEZE_PMT_A    = [2258,2530,2888,3428,5576,6234,7012,6734,6368];
 
 let squeezeMode = 'indexed';
 let compareA = 'North Park';
@@ -585,7 +585,7 @@ function fmtK(n) { return n>=1000000 ? '$'+(n/1000000).toFixed(2)+'M' : '$'+(n/1
 // ── TIMELINE ───────────────────────────────────────────────────
 function buildTimeline() {
   const el = document.getElementById('timelineRow');
-  const SD_INCOME = [72000,73500,75000,78000,80000,83000,86000,90000,96000,98000];
+  const SD_INCOME = [72000,73500,75000,78000,80000,83000,86000,90000,96000,104000];
   el.innerHTML = TIMELINE.map((t,i) => {
     const pmt = monthlyPmt(t.rate, 30, t.price * 0.8);
     const pct = Math.round((pmt*12)/SD_INCOME[i]*100);
@@ -635,9 +635,9 @@ function buildCompare() {
   el.innerHTML = sides.map((name, idx) => {
     const n = NEIGHBORHOODS.find(x=>x.name===name) || NEIGHBORHOODS[idx];
     const pmt = monthlyPmt(6.69, 30, n.price*0.8);
-    const totalPmt = pmt + (n.price*0.011/12) + 180 + 300;
+    const totalPmt = pmt + (n.price*0.011/12) + 185 + 300;
     const incNeeded = Math.round((pmt*12)/0.28);
-    const pct = Math.round((pmt*12)/98000*100);
+    const pct = Math.round((pmt*12)/104000*100);
     const badge = n.af==='good'?'badge-good':n.af==='stretch'?'badge-stretch':'badge-crisis';
     return `<div class="compare-card ${idx===0?'active':''}">
       <div class="compare-label">${idx===0?'Neighborhood A':'Neighborhood B'}</div>
@@ -737,17 +737,17 @@ function setSqueezeTab(mode) {
 
 // ── CALCULATOR ────────────────────────────────────────────────
 function updateCalc() {
-  const price  = parseFloat(document.getElementById('calcPrice').value)||895000;
+  const price  = parseFloat(document.getElementById('calcPrice').value)||952000;
   const downPct= parseFloat(document.getElementById('calcDown').value)||20;
   const rate   = parseFloat(document.getElementById('calcRate').value)||6.69;
-  const income = parseFloat(document.getElementById('calcIncome').value)||98000;
+  const income = parseFloat(document.getElementById('calcIncome').value)||104000;
 
   const down   = price * downPct/100;
   const loan   = price - down;
   const pmt    = monthlyPmt(rate, 30, loan);
   const tax    = price*0.011/12;
-  const ins    = 180;
-  const hoa    = 350;
+  const ins    = 185;
+  const hoa    = 400;
   const piti   = pmt+tax+ins+hoa;
   const incNeeded = Math.round((piti*12)/0.36);
   const pct    = Math.round((piti*12)/income*100);
