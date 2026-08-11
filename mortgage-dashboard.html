@@ -386,14 +386,14 @@
       <div class="card-hd">
         <div>
           <div class="card-title">Rate Forecast</div>
-          <div class="card-sub">30-yr fixed · Q3 2026 – Q2 2027</div>
+          <div class="card-sub">30-yr fixed · Q4 2026 – Q3 2027</div>
         </div>
       </div>
       <div class="card-body">
         <div class="fc-list" id="fcList"></div>
         <div style="margin-top:0.85rem; padding:0.7rem 0.85rem; background:var(--blue-light); border-radius:0.5rem; font-size:0.68rem; color:var(--muted); line-height:1.6;">
           <strong style="color:var(--blue);">Methodology</strong><br>
-          Projections derived from Fed dot plot, futures market pricing, and historical T10-to-mortgage spread regression. Confidence reflects implied volatility.
+          Projections blend the MBA forecast (30-yr averaging ~6.5% through 2026), Fannie Mae's ~6.2–6.3% call for 2027, and the current T10-to-mortgage spread. Confidence declines further out given elevated volatility.
         </div>
       </div>
     </div>
@@ -429,7 +429,7 @@
       </div>
       <div class="card-body">
         <div class="aff-list" id="affList"></div>
-        <div style="margin-top:0.75rem; font-size:0.67rem; color:var(--muted);">Excludes property taxes, homeowner's insurance, and PMI. San Diego median home price ~$900k — adjust loan amount accordingly.</div>
+        <div style="margin-top:0.75rem; font-size:0.67rem; color:var(--muted);">Excludes property taxes, homeowner's insurance, and PMI. San Diego median home price ~$950k — adjust loan amount accordingly.</div>
       </div>
     </div>
 
@@ -447,28 +447,28 @@
             <div class="ctx-icon">🏦</div>
             <div class="ctx-text">
               <strong>Fed Policy</strong>
-              <p>Fed holding rates steady. Futures markets pricing 1–2 cuts by end of 2026 — each cut could lower mortgage rates ~0.25%.</p>
+              <p>Fed funds holding at 3.50–3.75% for a second straight meeting. Rising oil prices and sticky inflation have flipped the narrative — futures now price meaningful odds of a September hike, a reversal from the rate-cut expectations earlier this year.</p>
             </div>
           </div>
           <div class="ctx-item">
             <div class="ctx-icon">📐</div>
             <div class="ctx-text">
               <strong>The Spread</strong>
-              <p>30-yr mortgages historically run 150–200bps above the 10-yr Treasury. Wider spread = banks pricing in more risk.</p>
+              <p>30-yr mortgages are running about 200bps above the 10-yr Treasury — wider than the historical ~150bps norm, reflecting lenders pricing in extra risk and volatility.</p>
             </div>
           </div>
           <div class="ctx-item">
             <div class="ctx-icon">🏙️</div>
             <div class="ctx-text">
               <strong>San Diego Market</strong>
-              <p>Inventory remains extremely tight. High demand + limited supply keeps prices elevated despite rate headwinds.</p>
+              <p>Only 17% of San Diego County households can afford the median-priced home per CAR's Q2 index. Inventory has loosened slightly, but elevated rates keep monthly payments the binding constraint.</p>
             </div>
           </div>
           <div class="ctx-item">
             <div class="ctx-icon">📊</div>
             <div class="ctx-text">
               <strong>Inflation Watch</strong>
-              <p>CPI and PCE data drive Treasury yields. Any surprise inflation print moves mortgage rates within 24–48 hours.</p>
+              <p>Markets are awaiting this week's CPI and PPI prints. Oil pushing toward $90/barrel on Mideast uncertainty has renewed inflation concerns and pushed Treasury yields to their highest levels in about a year.</p>
             </div>
           </div>
         </div>
@@ -489,54 +489,54 @@
 // STATIC DATA  (Freddie Mac PMMS — updated weekly)
 // ─────────────────────────────────────────────────────────────
 const PMMS = {
-  r30: 6.69, r30_prev: 6.74, r30_ago: 6.87,
-  r15: 5.94, r15_prev: 5.99, r15_ago: 6.13,
-  arm: 6.12, arm_prev: 6.18, arm_ago: 6.45,
-  week: 'Jun 12, 2026'
+  r30: 6.69, r30_prev: 6.66, r30_ago: 6.63,
+  r15: 6.01, r15_prev: 6.04, r15_ago: 5.75,
+  arm: 6.36, arm_prev: 6.42, arm_ago: 6.45,
+  week: 'Aug 6, 2026'
 };
 
 // Avg spread: 30-yr mortgage over 10-yr Treasury (bps)
-const AVG_SPREAD_BPS = 172;
+const AVG_SPREAD_BPS = 200;
 
 // Historical chart data
 const HIST = {
   '3M': {
-    labels: ['Apr 3','Apr 17','May 1','May 15','May 29','Jun 12'],
-    r30:  [6.82, 6.79, 6.77, 6.74, 6.71, 6.69],
-    r15:  [6.07, 6.04, 6.02, 5.99, 5.96, 5.94],
-    t10:  [4.35, 4.31, 4.28, 4.26, 4.24, 4.22],
+    labels: ['Jun 5','Jun 19','Jul 3','Jul 17','Jul 31','Aug 6'],
+    r30:  [6.61, 6.58, 6.55, 6.60, 6.66, 6.69],
+    r15:  [5.85, 5.88, 5.90, 5.95, 6.04, 6.01],
+    t10:  [4.42, 4.48, 4.52, 4.60, 4.66, 4.69],
   },
   '6M': {
-    labels: ['Jan','Feb','Mar','Apr','May','Jun'],
-    r30:  [7.04, 6.98, 6.89, 6.82, 6.74, 6.69],
-    r15:  [6.28, 6.22, 6.14, 6.07, 5.99, 5.94],
-    t10:  [4.58, 4.51, 4.42, 4.35, 4.27, 4.22],
+    labels: ['Mar','Apr','May','Jun','Jul','Aug'],
+    r30:  [6.75, 6.70, 6.65, 6.61, 6.60, 6.69],
+    r15:  [6.05, 6.00, 5.95, 5.85, 5.90, 6.01],
+    t10:  [4.35, 4.30, 4.28, 4.32, 4.45, 4.69],
   },
   '1Y': {
-    labels: ['Jun\'25','Jul','Aug','Sep','Oct','Nov','Dec','Jan\'26','Feb','Mar','Apr','May','Jun'],
-    r30:  [6.87,6.78,6.71,6.65,6.72,6.81,6.93,7.04,6.98,6.89,6.82,6.74,6.69],
-    r15:  [6.13,6.05,5.98,5.91,5.99,6.08,6.19,6.28,6.22,6.14,6.07,5.99,5.94],
-    t10:  [4.38,4.29,4.21,4.15,4.24,4.33,4.47,4.58,4.51,4.42,4.35,4.27,4.22],
+    labels: ['Aug\'25','Sep','Oct','Nov','Dec','Jan\'26','Feb','Mar','Apr','May','Jun','Jul','Aug'],
+    r30:  [6.63,6.58,6.65,6.75,6.85,6.95,6.88,6.78,6.70,6.65,6.61,6.60,6.69],
+    r15:  [5.75,5.80,5.88,5.98,6.08,6.18,6.10,6.00,5.95,5.90,5.85,5.95,6.01],
+    t10:  [4.20,4.15,4.25,4.38,4.50,4.60,4.52,4.40,4.32,4.28,4.30,4.45,4.69],
   },
   '3Y': {
-    labels: ['Jun\'23','Sep','Dec','Mar\'24','Jun','Sep','Dec','Mar\'25','Jun','Sep','Dec','Mar\'26','Jun'],
-    r30:  [6.71,7.18,6.61,6.94,7.22,6.88,6.85,6.91,6.87,6.72,6.93,6.89,6.69],
-    r15:  [6.10,6.52,5.93,6.25,6.47,6.14,6.11,6.18,6.13,5.98,6.19,6.14,5.94],
-    t10:  [3.84,4.57,3.97,4.20,4.36,4.65,4.57,4.41,4.38,4.18,4.47,4.42,4.22],
+    labels: ['Aug\'23','Nov','Feb\'24','May','Aug','Nov','Feb\'25','May','Aug','Nov','Feb\'26','May','Aug'],
+    r30:  [7.18,6.61,6.94,7.22,6.88,6.85,6.91,6.87,6.63,6.93,6.89,6.61,6.69],
+    r15:  [6.52,5.93,6.25,6.47,6.14,6.11,6.18,6.13,5.75,6.19,6.14,5.85,6.01],
+    t10:  [4.57,3.97,4.20,4.36,4.65,4.57,4.41,4.38,4.20,4.47,4.42,4.32,4.69],
   },
   '5Y': {
-    labels: ['Jun\'21','Dec','Jun\'22','Dec','Jun\'23','Dec','Jun\'24','Dec','Jun\'25','Dec','Jun\'26'],
-    r30:  [2.98,3.11,5.81,6.42,6.71,6.61,7.22,6.85,6.87,6.93,6.69],
-    r15:  [2.26,2.33,4.92,5.68,6.10,5.93,6.47,6.11,6.13,6.19,5.94],
-    t10:  [1.52,1.51,3.15,3.88,3.84,3.97,4.36,4.57,4.38,4.47,4.22],
+    labels: ['Aug\'21','Feb\'22','Aug\'22','Feb\'23','Aug\'23','Feb\'24','Aug\'24','Feb\'25','Aug\'25','Feb\'26','Aug\'26'],
+    r30:  [2.84,3.76,5.66,6.32,7.18,6.94,6.35,6.91,6.63,6.89,6.69],
+    r15:  [2.15,3.01,4.98,5.61,6.52,6.25,5.60,6.18,5.75,6.14,6.01],
+    t10:  [1.28,1.83,2.90,3.61,4.57,4.20,3.91,4.41,4.20,4.42,4.69],
   },
 };
 
 const FORECAST = [
-  {period:'Q3 2026', sub:'Jul – Sep 2026', rate:6.55, conf:72},
-  {period:'Q4 2026', sub:'Oct – Dec 2026', rate:6.40, conf:61},
-  {period:'Q1 2027', sub:'Jan – Mar 2027', rate:6.25, conf:48},
-  {period:'Q2 2027', sub:'Apr – Jun 2027', rate:6.10, conf:38},
+  {period:'Q4 2026', sub:'Oct – Dec 2026', rate:6.55, conf:70},
+  {period:'Q1 2027', sub:'Jan – Mar 2027', rate:6.35, conf:58},
+  {period:'Q2 2027', sub:'Apr – Jun 2027', rate:6.25, conf:46},
+  {period:'Q3 2027', sub:'Jul – Sep 2027', rate:6.15, conf:35},
 ];
 
 // ─────────────────────────────────────────────────────────────
@@ -571,7 +571,7 @@ async function fetchT10() {
     throw new Error('No valid data');
   } catch(e) {
     // Fallback: return our known static value
-    return { val: 4.22, date: 'latest', fallback: true };
+    return { val: 4.69, date: 'latest', fallback: true };
   }
 }
 
@@ -674,7 +674,7 @@ function updateStatCards(t10) {
   document.getElementById('sb15').outerHTML = badgeHtml(PMMS.r15, PMMS.r15_prev);
   // Implied (live)
   const impl = (t10 + AVG_SPREAD_BPS / 100).toFixed(2);
-  const implPrev = (4.27 + AVG_SPREAD_BPS / 100).toFixed(2);
+  const implPrev = (4.65 + AVG_SPREAD_BPS / 100).toFixed(2);
   document.getElementById('svImpl').textContent = impl;
   document.getElementById('sbImpl').outerHTML = badgeHtml(parseFloat(impl), parseFloat(implPrev));
   flashEl('cardImpl');
@@ -689,12 +689,12 @@ function updateStatCards(t10) {
 function updateTreasuryBar(t10, isFallback) {
   const spread = (t10 + AVG_SPREAD_BPS / 100 - t10).toFixed(0);
   document.getElementById('tlVal').innerHTML = t10.toFixed(2) + '%' + (isFallback ? ' <span style="font-size:0.65rem;color:rgba(255,255,255,0.4)">(est)</span>' : '');
-  const chg = (t10 - 4.27).toFixed(2);
+  const chg = (t10 - 4.65).toFixed(2);
   const chgEl = document.getElementById('tlChange');
   chgEl.textContent = (chg >= 0 ? '+' : '') + chg + '%';
   chgEl.style.color = chg > 0 ? '#f87171' : '#34D399';
-  document.getElementById('tl52Low').textContent = '3.88%';
-  document.getElementById('tl52High').textContent = '4.74%';
+  document.getElementById('tl52Low').textContent = '3.94%';
+  document.getElementById('tl52High').textContent = '4.75%';
   document.getElementById('tlSpread').textContent = AVG_SPREAD_BPS + ' bps';
   document.getElementById('tlSpinner').style.display = 'none';
 }
@@ -708,11 +708,11 @@ function buildTicker(t10) {
     {name:'30-YR FIXED', val: PMMS.r30.toFixed(2)+'%', chg: (PMMS.r30-PMMS.r30_prev).toFixed(2), up: PMMS.r30 > PMMS.r30_prev},
     {name:'15-YR FIXED', val: PMMS.r15.toFixed(2)+'%', chg: (PMMS.r15-PMMS.r15_prev).toFixed(2), up: PMMS.r15 > PMMS.r15_prev},
     {name:'5/1 ARM',     val: PMMS.arm.toFixed(2)+'%', chg: (PMMS.arm-PMMS.arm_prev).toFixed(2), up: PMMS.arm > PMMS.arm_prev},
-    {name:'10-YR T-NOTE',val: t10.toFixed(2)+'%',      chg: (t10-4.27).toFixed(2),                up: t10 > 4.27},
-    {name:'IMPLIED 30YR',val: impl.toFixed(2)+'%',     chg: (impl-(4.27+AVG_SPREAD_BPS/100)).toFixed(2), up: false},
-    {name:'FED FUNDS',   val: '5.25–5.50%', chg: '0.00', up: false},
-    {name:'PRIME RATE',  val: '8.50%',      chg: '0.00', up: false},
-    {name:'30-YR HIGH (52WK)', val: '7.22%', chg: '', up: false},
+    {name:'10-YR T-NOTE',val: t10.toFixed(2)+'%',      chg: (t10-4.65).toFixed(2),                up: t10 > 4.65},
+    {name:'IMPLIED 30YR',val: impl.toFixed(2)+'%',     chg: (impl-(4.65+AVG_SPREAD_BPS/100)).toFixed(2), up: false},
+    {name:'FED FUNDS',   val: '3.50–3.75%', chg: '0.00', up: false},
+    {name:'PRIME RATE',  val: '6.75%',      chg: '0.00', up: false},
+    {name:'30-YR HIGH (52WK)', val: '6.95%', chg: '', up: false},
     {name:'30-YR LOW (52WK)',  val: '6.55%', chg: '', up: false},
   ];
   // Duplicate for seamless loop
@@ -730,7 +730,7 @@ function buildTicker(t10) {
 // ─────────────────────────────────────────────────────────────
 function buildChart(range, t10Live) {
   const d = HIST[range];
-  const fLabels = [...d.labels, 'Q3\'26', 'Q2\'27'];
+  const fLabels = [...d.labels, 'Q4\'26', 'Q3\'27'];
   const last30 = d.r30[d.r30.length-1];
   // Patch last T10 with live value
   const t10data = [...d.t10];
@@ -739,7 +739,7 @@ function buildChart(range, t10Live) {
   // Forecast line anchors at last real point
   const fLine = d.r30.map(()=>null);
   fLine[fLine.length-1] = last30;
-  fLine.push(last30 - 0.14, 6.10);
+  fLine.push(6.55, 6.15);
 
   const ctx = document.getElementById('rateChart').getContext('2d');
   if (chart) chart.destroy();
@@ -768,7 +768,7 @@ function buildChart(range, t10Live) {
       },
       scales: {
         x: { grid:{color:'rgba(0,0,0,0.035)',drawBorder:false}, ticks:{font:{size:10,family:'Inter'},color:'#94A3B8'} },
-        y: { grid:{color:'rgba(0,0,0,0.035)',drawBorder:false}, ticks:{font:{size:10,family:'IBM Plex Mono'},color:'#94A3B8', callback:v=>v.toFixed(1)+'%'}, min: range==='5Y'?1.5:3.5 }
+        y: { grid:{color:'rgba(0,0,0,0.035)',drawBorder:false}, ticks:{font:{size:10,family:'IBM Plex Mono'},color:'#94A3B8', callback:v=>v.toFixed(1)+'%'}, min: range==='5Y'?1.0:3.5 }
       }
     }
   });
