@@ -583,13 +583,20 @@ function todayStr() {
 // ─────────────────────────────────────────────────────────────
 // RENDER HELPERS
 // ─────────────────────────────────────────────────────────────
-function badgeHtml(cur, prev, suffix='% wk/wk') {
+function applyBadge(id, cur, prev, suffix='% wk/wk') {
+  const el = document.getElementById(id);
+  if (!el) return;
   const d = (cur - prev).toFixed(2);
   const n = parseFloat(d);
-  if (Math.abs(n) < 0.005) return `<span class="stat-badge badge-flat">— Unchanged</span>`;
+  if (Math.abs(n) < 0.005) {
+    el.className = 'stat-badge badge-flat';
+    el.textContent = '— Unchanged';
+    return;
+  }
   const cls = n > 0 ? 'badge-up' : 'badge-down';
   const arrow = n > 0 ? '▲' : '▼';
-  return `<span class="stat-badge ${cls}">${arrow} ${Math.abs(d)}${suffix}</span>`;
+  el.className = 'stat-badge ' + cls;
+  el.textContent = `${arrow} ${Math.abs(d)}${suffix}`;
 }
 
 function flashEl(id) {
@@ -667,20 +674,20 @@ function buildAffordability(r30, r15, arm) {
 function updateStatCards(t10) {
   // 30-yr
   document.getElementById('sv30').textContent = PMMS.r30.toFixed(2);
-  document.getElementById('sb30').outerHTML = badgeHtml(PMMS.r30, PMMS.r30_prev);
+  applyBadge('sb30', PMMS.r30, PMMS.r30_prev);
   document.getElementById('sm30').textContent = `PMMS week of ${PMMS.week}`;
   // 15-yr
   document.getElementById('sv15').textContent = PMMS.r15.toFixed(2);
-  document.getElementById('sb15').outerHTML = badgeHtml(PMMS.r15, PMMS.r15_prev);
+  applyBadge('sb15', PMMS.r15, PMMS.r15_prev);
   // Implied (live)
   const impl = (t10 + AVG_SPREAD_BPS / 100).toFixed(2);
   const implPrev = (4.65 + AVG_SPREAD_BPS / 100).toFixed(2);
   document.getElementById('svImpl').textContent = impl;
-  document.getElementById('sbImpl').outerHTML = badgeHtml(parseFloat(impl), parseFloat(implPrev));
+  applyBadge('sbImpl', parseFloat(impl), parseFloat(implPrev));
   flashEl('cardImpl');
   // ARM
   document.getElementById('svARM').textContent = PMMS.arm.toFixed(2);
-  document.getElementById('sbARM').outerHTML = badgeHtml(PMMS.arm, PMMS.arm_prev);
+  applyBadge('sbARM', PMMS.arm, PMMS.arm_prev);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -696,7 +703,6 @@ function updateTreasuryBar(t10, isFallback) {
   document.getElementById('tl52Low').textContent = '3.94%';
   document.getElementById('tl52High').textContent = '4.75%';
   document.getElementById('tlSpread').textContent = AVG_SPREAD_BPS + ' bps';
-  document.getElementById('tlSpinner').style.display = 'none';
 }
 
 // ─────────────────────────────────────────────────────────────
