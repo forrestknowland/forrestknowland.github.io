@@ -144,6 +144,11 @@
     .thesis-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); margin-bottom: 0.3rem; }
     .thesis-text { font-size: 0.75rem; color: var(--muted); line-height: 1.6; }
 
+    /* NEWS BOX */
+    .news-box { background: var(--blue-lt); border-left: 3px solid var(--purple); border-radius: 0 0.4rem 0.4rem 0; padding: 0.75rem 1rem; margin-bottom: 0.75rem; }
+    .news-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--purple); margin-bottom: 0.3rem; }
+    .news-text { font-size: 0.75rem; color: var(--text); line-height: 1.6; }
+
     /* RATING BADGE */
     .rating-row { display: flex; justify-content: space-between; align-items: center; }
     .rating-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 1rem; }
@@ -239,7 +244,7 @@
 <div class="page">
 
   <div class="disclaimer">
-    ⚠️ <strong>Investment Disclaimer:</strong> This tracker is for educational and demonstrative purposes only. Nothing here constitutes financial advice. All data sourced from public filings, Freddie Mac, and market data providers as of June 2026. Past performance does not guarantee future results.
+    ⚠️ <strong>Investment Disclaimer:</strong> This tracker is for educational and demonstrative purposes only. Nothing here constitutes financial advice. All data sourced from public filings, company press releases, and market data providers as of August 2026. Past performance does not guarantee future results.
   </div>
 
   <!-- SUMMARY BAR -->
@@ -251,8 +256,8 @@
     </div>
     <div class="sb-item">
       <div class="sb-label">Avg Analyst Upside</div>
-      <div class="sb-val">+29%</div>
-      <div class="sb-change pos">vs current prices, updated late June</div>
+      <div class="sb-val">+32%</div>
+      <div class="sb-change pos">vs current prices, updated August</div>
     </div>
     <div class="sb-item">
       <div class="sb-label">Robotics Sector</div>
@@ -267,7 +272,7 @@
     <div class="sb-item">
       <div class="sb-label">Last Updated</div>
       <div class="sb-val" id="sumDate" style="font-size:0.9rem">—</div>
-      <div class="sb-change" style="color:rgba(255,255,255,0.4)">Jun 2026 data</div>
+      <div class="sb-change" style="color:rgba(255,255,255,0.4)">Aug 2026 data</div>
     </div>
   </div>
 
@@ -285,9 +290,9 @@
           <span class="sc-sector sector-robotics">🚗 Autonomous Driving</span>
         </div>
         <div class="sc-right">
-          <div class="sc-price">$8.20</div>
-          <div class="sc-change neg">▼ down from $10.41, broad ADAS selloff</div>
-          <div class="sc-mktcap">Mkt Cap: $6.9B</div>
+          <div class="sc-price">$8.78</div>
+          <div class="sc-change pos">▲ up from $8.20, Q2 beat-and-raise</div>
+          <div class="sc-mktcap">Mkt Cap: ~$7.4B</div>
         </div>
       </div>
       <div class="sc-body">
@@ -295,13 +300,13 @@
           <div class="metric-box"><div class="metric-label">Revenue TTM</div><div class="metric-val">$1.9B</div></div>
           <div class="metric-box"><div class="metric-label">Rev Growth</div><div class="metric-val good">+27% YoY</div></div>
           <div class="metric-box"><div class="metric-label">EPS (TTM)</div><div class="metric-val bad">-$0.48</div></div>
-          <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val warn">4.5x</div></div>
+          <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val warn">4.8x</div></div>
         </div>
         <div class="metrics-row">
           <div class="metric-box"><div class="metric-label">Gross Margin</div><div class="metric-val good">~48%</div></div>
           <div class="metric-box"><div class="metric-label">Op. Cash Flow</div><div class="metric-val good">$602M</div></div>
           <div class="metric-box"><div class="metric-label">52W Low</div><div class="metric-val">$6.47</div></div>
-          <div class="metric-box"><div class="metric-label">52W High</div><div class="metric-val">$20.18</div></div>
+          <div class="metric-box"><div class="metric-label">52W High</div><div class="metric-val">$22.51</div></div>
         </div>
         <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Price Trend</div>
         <div class="bar-spark" id="mblySpark"></div>
@@ -310,13 +315,19 @@
 
         <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Revenue Trajectory ($M)</div>
         <div class="rev-bars" id="mblyRevBars" style="margin-bottom:0.85rem;"></div>
+
+        <div class="news-box">
+          <div class="news-label">📰 Since June</div>
+          <div class="news-text">Q2 2026 was a genuine beat-and-raise: stronger EyeQ/SuperVision sales pushed management to lift full-year guidance, and Piper Sandler upgraded the stock to Overweight ($12 target) on July 24. But the reaction was split — RBC, JPMorgan and UBS all trimmed targets on margin pressure and CEO-transition uncertainty. On Aug 8, an insider made a notable open-market purchase, which TipRanks flagged as a confidence signal from leadership.</div>
+        </div>
+
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
-          <div class="thesis-text">Mobileye is the ADAS infrastructure layer inside 800M+ cars globally. Q1 2026 showed 27% revenue growth driven by Chinese OEM exports and Western ADAS adoption, but the stock has sold off hard since, down nearly 20% from where I first tracked it. Jefferies initiated coverage at Underperform with an $8 target, which lines up with where the stock sits now. The real option here is still SuperVision and robotaxi. If even one major OEM scales it, the current price looks cheap relative to the 15 analysts who still rate it a buy with an average target near $13. Risk: Intel spinout overhang, Chinese competition from Momenta and Huawei, and now bearish sentiment from at least one major shop.</div>
+          <div class="thesis-text">Mobileye is the ADAS infrastructure layer inside 800M+ cars globally. 27% revenue growth continues to be driven by Chinese OEM exports and Western ADAS adoption. The real option here is still SuperVision and robotaxi — if even one major OEM scales it, the current price looks cheap relative to the consensus target near $12-13. Risk: Intel spinout overhang, Chinese competition from Momenta and Huawei, and a still-divided analyst community on near-term margins.</div>
         </div>
         <div class="rating-row">
           <span class="rating-badge r-watch">👁 Watching</span>
-          <span class="analyst-line">Avg PT: $13.29 · 15 Buy, 1 Sell</span>
+          <span class="analyst-line">Avg PT: $12.36 · Consensus Buy</span>
         </div>
         <div class="risk-row" style="margin-top:0.75rem;">
           <span class="risk-label">Volatility</span>
@@ -335,23 +346,23 @@
           <span class="sc-sector sector-robotics">📡 LiDAR / Physical AI</span>
         </div>
         <div class="sc-right">
-          <div class="sc-price">$53.31</div>
-          <div class="sc-change pos">▲ +28.7% on AIM partnership news</div>
-          <div class="sc-mktcap">Mkt Cap: $3.4B</div>
+          <div class="sc-price">$40.70</div>
+          <div class="sc-change pos">▲ +17% on Q2 earnings beat</div>
+          <div class="sc-mktcap">Mkt Cap: ~$2.6B</div>
         </div>
       </div>
       <div class="sc-body">
         <div class="metrics-row">
-          <div class="metric-box"><div class="metric-label">Revenue 2025</div><div class="metric-val">$169M</div></div>
-          <div class="metric-box"><div class="metric-label">Rev Growth</div><div class="metric-val good">+52% YoY</div></div>
-          <div class="metric-box"><div class="metric-label">Net Income</div><div class="metric-val bad">-$60M</div></div>
-          <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val warn">14.7x</div></div>
+          <div class="metric-box"><div class="metric-label">Revenue Q2</div><div class="metric-val good">$55M</div></div>
+          <div class="metric-box"><div class="metric-label">Rev Growth</div><div class="metric-val good">+56% YoY</div></div>
+          <div class="metric-box"><div class="metric-label">Cash</div><div class="metric-val good">$263M</div></div>
+          <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val warn">11.2x</div></div>
         </div>
         <div class="metrics-row">
-          <div class="metric-box"><div class="metric-label">EBITDA</div><div class="metric-val bad">-$58.5M</div></div>
+          <div class="metric-box"><div class="metric-label">Q3 Rev Guide</div><div class="metric-val good">$54.5-57.5M</div></div>
           <div class="metric-box"><div class="metric-label">Employees</div><div class="metric-val">320</div></div>
           <div class="metric-box"><div class="metric-label">Fin. Strength</div><div class="metric-val good">8/10</div></div>
-          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val warn">$46.86</div></div>
+          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val warn">$54.57</div></div>
         </div>
         <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Price Trend</div>
         <div class="bar-spark" id="oustSpark"></div>
@@ -360,13 +371,19 @@
 
         <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Revenue Trajectory ($M)</div>
         <div class="rev-bars" id="oustRevBars" style="margin-bottom:0.85rem;"></div>
+
+        <div class="news-box">
+          <div class="news-label">📰 Since June</div>
+          <div class="news-text">Ouster priced a $200M+ secondary offering in early July at $55.22/share, which — combined with a broader pullback — dragged the stock from its June high near $53 down into the high-$30s by mid-July. Q2 results on Aug 6 reset the story: revenue of $55M beat estimates (+56% YoY), and EPS of $0.27 crushed the $0.14 consensus, sending shares up 17%. Rev8 lidar also picked up Build America Buy America compliance, opening the door to government deals like a new Utah DOT / Econolite BlueCity contract. Northland raised its target to $60 (from $38) and Oppenheimer to $57 (from $42).</div>
+        </div>
+
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
-          <div class="thesis-text">Ouster is positioning itself as the "eyes of Physical AI." Rev8 digital lidar combines depth and color on one chip, which is genuine hardware innovation. 52% revenue growth with a debt-free balance sheet is rare at this stage. The stock has run up sharply on partnership news with AIM Intelligent Machines and FieldAI, plus a Roth Capital initiation at Buy with a $75 price target. It's now trading well above the older consensus target, so the easy money may be made. Worth watching for a pullback before adding. Insider selling has also picked up, which is worth tracking.</div>
+          <div class="thesis-text">Ouster is positioning itself as the "eyes of Physical AI." Rev8 digital lidar combines depth and color on one chip, which is genuine hardware innovation. 56% Q2 revenue growth with a $263M cash balance funds continued scaling without near-term financing stress, though the July offering was real dilution. The stock is volatile and has now round-tripped a large chunk of its June rally — worth watching for stabilization before adding more.</div>
         </div>
         <div class="rating-row">
-          <span class="rating-badge r-hold">📈 Above Target</span>
-          <span class="analyst-line">Avg PT: $46.86 · price has run ahead of consensus, new targets pending</span>
+          <span class="rating-badge r-buy">⭐ Momentum Building</span>
+          <span class="analyst-line">Avg PT: $54.57 · +34% upside</span>
         </div>
         <div class="risk-row" style="margin-top:0.75rem;">
           <span class="risk-label">Volatility</span>
@@ -392,9 +409,9 @@
           <span class="sc-sector sector-saas">🎙 Conversational AI / RTE</span>
         </div>
         <div class="sc-right">
-          <div class="sc-price">$4.53</div>
-          <div class="sc-change pos">▲ Q1 rev +13.5% YoY</div>
-          <div class="sc-mktcap">Mkt Cap: $388M</div>
+          <div class="sc-price">$4.07</div>
+          <div class="sc-change neg">▼ down from $4.53, earnings Aug 13</div>
+          <div class="sc-mktcap">Mkt Cap: ~$349M</div>
         </div>
       </div>
       <div class="sc-body">
@@ -407,8 +424,8 @@
         <div class="metrics-row">
           <div class="metric-box"><div class="metric-label">Op. Cash Flow</div><div class="metric-val good">$27.2M</div></div>
           <div class="metric-box"><div class="metric-label">Current Ratio</div><div class="metric-val good">4.58x</div></div>
-          <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val good">2.7x</div></div>
-          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$6.17</div></div>
+          <div class="metric-box"><div class="metric-label">P/S Ratio</div><div class="metric-val good">2.4x</div></div>
+          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$6.60</div></div>
         </div>
         <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Price Trend</div>
         <div class="bar-spark" id="apiSpark"></div>
@@ -417,13 +434,19 @@
 
         <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Revenue Trajectory ($M)</div>
         <div class="rev-bars" id="apiRevBars" style="margin-bottom:0.85rem;"></div>
+
+        <div class="news-box">
+          <div class="news-label">📰 Since June</div>
+          <div class="news-text">The headline: CEO Tony Zhao announced plans to personally buy up to $20M of ADS shares on the open market — a strong insider-confidence signal at these prices. The stock has otherwise drifted down slightly since June. Q2 earnings land Aug 13 (after market close). BofA trimmed its target modestly to $6.60 from $7.10 ahead of the print but kept its Buy rating, citing valuation rollover rather than a change in the story.</div>
+        </div>
+
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
-          <div class="thesis-text">Agora just posted its sixth consecutive quarter of GAAP profitability, which is genuinely rare for a growth software company. The pivot toward Conversational AI Agents, basically voice automation for customer service and sales, lines up well with where the broader AI market is heading. Trading at around 2.7x sales with a 4.58 current ratio, the balance sheet is strong enough that I don't worry about dilution risk here. BofA trimmed its price target slightly to $6.60 in June, but it's still a Buy rating. I'm watching for the AI product line to actually move the revenue growth rate, which has been steady but not yet accelerating.</div>
+          <div class="thesis-text">Agora has now posted six-plus consecutive quarters of GAAP profitability, which is rare for a growth software company. The pivot toward Conversational AI Agents lines up well with where the broader AI market is heading. Trading at roughly 2.4x sales with a 4.58 current ratio, the balance sheet is strong enough that dilution risk stays low. The CEO's personal buy is the most concrete bullish signal since I added this name — the Aug 13 print will show whether the AI product line is finally accelerating growth.</div>
         </div>
         <div class="rating-row">
           <span class="rating-badge r-buy">⭐ High Conviction</span>
-          <span class="analyst-line">Avg PT: $6.17 · +36% upside</span>
+          <span class="analyst-line">Avg PT: $6.60 · +62% upside</span>
         </div>
         <div class="risk-row" style="margin-top:0.75rem;">
           <span class="risk-label">Volatility</span>
@@ -442,23 +465,23 @@
           <span class="sc-sector sector-saas">📊 Digital Analytics / AI</span>
         </div>
         <div class="sc-right">
-          <div class="sc-price">$7.17</div>
-          <div class="sc-change neg">▼ down on AI margin pressure fears</div>
-          <div class="sc-mktcap">Mkt Cap: $1.2B</div>
+          <div class="sc-price">$10.61</div>
+          <div class="sc-change pos">▲ +48% since June, Q2 blowout</div>
+          <div class="sc-mktcap">Mkt Cap: ~$1.5B</div>
         </div>
       </div>
       <div class="sc-body">
         <div class="metrics-row">
-          <div class="metric-box"><div class="metric-label">Revenue TTM</div><div class="metric-val">$343M</div></div>
-          <div class="metric-box"><div class="metric-label">Gross Margin</div><div class="metric-val good">74%</div></div>
-          <div class="metric-box"><div class="metric-label">ARR</div><div class="metric-val good">$374M</div></div>
-          <div class="metric-box"><div class="metric-label">ARR Growth</div><div class="metric-val good">+17% YoY</div></div>
+          <div class="metric-box"><div class="metric-label">Revenue Q2</div><div class="metric-val good">$100.9M</div></div>
+          <div class="metric-box"><div class="metric-label">Rev Growth</div><div class="metric-val good">+21% YoY</div></div>
+          <div class="metric-box"><div class="metric-label">ARR</div><div class="metric-val good">$410M</div></div>
+          <div class="metric-box"><div class="metric-label">ARR Growth</div><div class="metric-val good">+22% YoY</div></div>
         </div>
         <div class="metrics-row">
-          <div class="metric-box"><div class="metric-label">Net Income</div><div class="metric-val bad">-$88.5M</div></div>
-          <div class="metric-box"><div class="metric-label">Op. Cash Flow</div><div class="metric-val good">$29.8M</div></div>
-          <div class="metric-box"><div class="metric-label">Fwd P/S</div><div class="metric-val good">2.2x</div></div>
-          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$10.65</div></div>
+          <div class="metric-box"><div class="metric-label">Free Cash Flow</div><div class="metric-val good">$23.7M</div></div>
+          <div class="metric-box"><div class="metric-label">FY26 Rev Guide</div><div class="metric-val good">$407-411M</div></div>
+          <div class="metric-box"><div class="metric-label">Fwd P/S</div><div class="metric-val good">3.2x</div></div>
+          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$12.82</div></div>
         </div>
         <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Price Trend</div>
         <div class="bar-spark" id="amplSpark"></div>
@@ -467,13 +490,19 @@
 
         <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Revenue Trajectory ($M)</div>
         <div class="rev-bars" id="amplRevBars" style="margin-bottom:0.85rem;"></div>
+
+        <div class="news-box">
+          <div class="news-label">📰 Since June</div>
+          <div class="news-text">This is the standout turnaround of the watchlist. Q2 2026 revenue hit $100.9M (+21% YoY), topping estimates, with ARR at $410M (+22% YoY) and $23.7M of free cash flow — reported Aug 5. The stock has rallied nearly 50% since June as the AI product push (Statsig integration, agentic analytics) started showing up in the numbers. A wave of price target hikes followed: Baird to $14 (from $10), Piper Sandler to $13, DA Davidson to $12.50. Citi raised its target to $11 but kept a Hold rating — a reminder not everyone is fully on board yet even after the beat.</div>
+        </div>
+
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
-          <div class="thesis-text">Amplitude has gotten cheaper since I first flagged it, now down to about $7 a share after BofA downgraded the stock to Neutral on margin pressure from AI inference costs. Q1 2026 revenue still grew 17% YoY to $93.5M and beat estimates, but the company cut its FY26 EPS outlook, which spooked the market. The Statsig partnership and AI product push are real, and at roughly 2x forward sales this is about as cheap as Amplitude has ever traded relative to its growth rate. The CTO selling shares under a pre-set trading plan isn't a red flag on its own, but the stock needs a clean quarter to rebuild confidence. Higher risk than when I first added it, but the valuation argument got stronger, not weaker.</div>
+          <div class="thesis-text">Amplitude has gone from my cheapest, most beaten-down name to my best performer in six weeks. The margin-pressure fears from AI inference costs that hit the stock in June look overdone in hindsight — Q2 showed the AI roadmap converting into real revenue and cash flow. Even after the run, forward P/S sits around 3.2x, still well below software peers growing this fast. The risk now is expectations: with five analysts raising targets post-print, the bar for the next quarter is higher.</div>
         </div>
         <div class="rating-row">
           <span class="rating-badge r-buy">⭐ High Conviction</span>
-          <span class="analyst-line">Avg PT: $10.65 · +55% upside · 11 analysts Buy</span>
+          <span class="analyst-line">Avg PT: $12.82 · +21% upside · 9 analysts Buy</span>
         </div>
         <div class="risk-row" style="margin-top:0.75rem;">
           <span class="risk-label">Volatility</span>
@@ -492,9 +521,9 @@
           <span class="sc-sector sector-finance">🛡 Fraud Prevention / Fintech</span>
         </div>
         <div class="sc-right">
-          <div class="sc-price">$4.98</div>
-          <div class="sc-change pos">▲ steady, buyback expanded to $75M</div>
-          <div class="sc-mktcap">Mkt Cap: $716M</div>
+          <div class="sc-price">$5.33</div>
+          <div class="sc-change pos">▲ up from $4.98, earnings Aug 12</div>
+          <div class="sc-mktcap">Mkt Cap: ~$767M</div>
         </div>
       </div>
       <div class="sc-body">
@@ -507,8 +536,8 @@
         <div class="metrics-row">
           <div class="metric-box"><div class="metric-label">Gross Margin</div><div class="metric-val good">52%</div></div>
           <div class="metric-box"><div class="metric-label">Cash</div><div class="metric-val good">$276M</div></div>
-          <div class="metric-box"><div class="metric-label">EV/Rev</div><div class="metric-val good">1.32x</div></div>
-          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$5.55</div></div>
+          <div class="metric-box"><div class="metric-label">EV/Rev</div><div class="metric-val good">1.41x</div></div>
+          <div class="metric-box"><div class="metric-label">Analyst PT</div><div class="metric-val good">$5.50</div></div>
         </div>
         <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Price Trend</div>
         <div class="bar-spark" id="rskdSpark"></div>
@@ -517,13 +546,19 @@
 
         <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Revenue Trajectory ($M)</div>
         <div class="rev-bars" id="rskdRevBars" style="margin-bottom:0.85rem;"></div>
+
+        <div class="news-box">
+          <div class="news-label">📰 Since June</div>
+          <div class="news-text">Riskified reports Q2 earnings on Aug 12 (tomorrow), with the Street expecting revenue near $89M (+10% YoY). Since June, the company kept up its buyback pace, landed Kogan.com as a new customer — a deal expected to save the merchant $1.5M annually and that sent shares up 4% on announcement — and Keefe Bruyette raised its price target to $5.50 from $5.25. Shareholders approved all board and auditor proposals at the Aug 6 annual meeting, and the board has been actively adding fintech-veteran directors.</div>
+        </div>
+
         <div class="thesis-box">
           <div class="thesis-label">Investment Thesis</div>
-          <div class="thesis-text">Riskified processes more than $37B in GMV and is getting closer to consistent profitability. Adjusted EBITDA jumped 370% year over year in Q1 2026. Trading at 1.32x EV to revenue with $276M in cash, which is nearly 40% of the market cap, this looks like a real value setup rather than just a cheap stock. The board just expanded the buyback to $75M on top of what they'd already spent, which tells me management thinks the stock is undervalued too. The agentic commerce angle, basically fraud protection for AI-driven shopping, gives this a longer runway than people give it credit for. Most analysts don't cover this one closely, which is part of why I like it.</div>
+          <div class="thesis-text">Riskified processes more than $37B in GMV and keeps inching toward consistent profitability. Trading at roughly 1.4x EV to revenue with $276M in cash — a large share of the market cap — this still looks like a value setup rather than just a cheap stock. The ongoing buyback tells me management thinks the same. The agentic-commerce angle (fraud protection for AI-driven shopping) gives this a longer runway than the market seems to be pricing in. Tomorrow's print is the next real catalyst.</div>
         </div>
         <div class="rating-row">
           <span class="rating-badge r-buy">⭐ High Conviction</span>
-          <span class="analyst-line">Avg PT: $5.55 · +17% upside · Value play</span>
+          <span class="analyst-line">Avg PT: $5.50 · +3% upside · Value play</span>
         </div>
         <div class="risk-row" style="margin-top:0.75rem;">
           <span class="risk-label">Volatility</span>
@@ -538,7 +573,7 @@
   <!-- COMPARISON TABLE -->
   <div class="card">
     <div class="card-hd">
-      <div><div class="card-title">Full Comparison — All Holdings</div><div class="card-sub">Key metrics side by side · June 2026</div></div>
+      <div><div class="card-title">Full Comparison — All Holdings</div><div class="card-sub">Key metrics side by side · August 2026</div></div>
       <div class="tabs">
         <button class="tab on" onclick="showTab('valuation')">Valuation</button>
         <button class="tab" onclick="showTab('growth')">Growth</button>
@@ -568,7 +603,7 @@
   </div>
 
   <div class="dash-footer">
-    <span>Built by <a href="index.html">Forrest Knowland</a> · Data: SEC filings, Stockanalysis.com, Investing.com, Yahoo Finance · June 2026</span>
+    <span>Built by <a href="index.html">Forrest Knowland</a> · Data: SEC filings, Stockanalysis.com, Investing.com, Yahoo Finance, TipRanks · August 2026</span>
     <span>For educational purposes only · Not financial advice</span>
   </div>
 </div>
@@ -577,47 +612,47 @@
 // ── DATA ─────────────────────────────────────────────────────
 const STOCKS = [
   {
-    ticker:'MBLY', name:'Mobileye Global', price:8.20, pt:13.29,
-    rev:[1241,1400,1628,1900], revYears:['2023','2024','2025','2026E'],
-    spark:[18,20,14,12,10,9,8.5,8.7,8.3,8.5,8.20],
+    ticker:'MBLY', name:'Mobileye Global', price:8.78, pt:12.36,
+    rev:[1241,1400,1628,1950], revYears:['2023','2024','2025','2026E'],
+    spark:[18,20,14,12,10,9,8.5,8.7,8.3,8.5,8.20,7.90,8.10,8.50,8.78],
     sector:'Robotics', color:'#1A56DB',
-    valuation:{ pe:'N/M', ps:'4.5x', evRev:'3.8x', pb:'0.9x' },
+    valuation:{ pe:'N/M', ps:'4.8x', evRev:'4.0x', pb:'0.9x' },
     growth:{ revGrowth:'+27%', epsGrowth:'N/M', grossMargin:'48%', arrGrowth:'—' },
     health:{ cash:'$1.2B', currentRatio:'3.5x', debtEq:'0.07x', ocf:'$602M' }
   },
   {
-    ticker:'OUST', name:'Ouster Inc.', price:53.31, pt:46.86,
-    rev:[73,111,169,230], revYears:['2023','2024','2025','2026E'],
-    spark:[8,12,18,22,28,32,38,40,36,42,53.31],
+    ticker:'OUST', name:'Ouster Inc.', price:40.70, pt:54.57,
+    rev:[73,111,169,235], revYears:['2023','2024','2025','2026E'],
+    spark:[8,12,18,22,28,32,38,40,36,42,53.31,48,38,34,40.70],
     sector:'Robotics', color:'#7C3AED',
-    valuation:{ pe:'N/M', ps:'14.7x', evRev:'12x', pb:'N/A' },
-    growth:{ revGrowth:'+52%', epsGrowth:'N/M', grossMargin:'~40%', arrGrowth:'—' },
-    health:{ cash:'Debt-free', currentRatio:'N/A', debtEq:'0x', ocf:'Neg.' }
+    valuation:{ pe:'N/M', ps:'11.2x', evRev:'9.2x', pb:'N/A' },
+    growth:{ revGrowth:'+56%', epsGrowth:'N/M', grossMargin:'~40%', arrGrowth:'—' },
+    health:{ cash:'$263M', currentRatio:'N/A', debtEq:'Low', ocf:'Improving' }
   },
   {
-    ticker:'API', name:'Agora Inc.', price:4.53, pt:6.17,
+    ticker:'API', name:'Agora Inc.', price:4.07, pt:6.60,
     rev:[121,128,138,158], revYears:['2023','2024','2025','2026E'],
-    spark:[4.2,3.8,3.5,3.2,3.5,3.8,4.0,4.2,4.5,4.53,4.53],
+    spark:[4.2,3.8,3.5,3.2,3.5,3.8,4.0,4.2,4.5,4.53,4.53,4.30,4.15,4.09,4.07],
     sector:'Conviction', color:'#059669',
-    valuation:{ pe:'226x', ps:'2.7x', evRev:'1.9x', pb:'1.2x' },
+    valuation:{ pe:'204x', ps:'2.4x', evRev:'1.7x', pb:'1.1x' },
     growth:{ revGrowth:'+13.5%', epsGrowth:'+120%', grossMargin:'66.4%', arrGrowth:'—' },
-    health:{ cash:'Strong', currentRatio:'4.58x', debtEq:'Low', ocf:'$27M' }
+    health:{ cash:'Strong', currentRatio:'4.58x', debtEq:'Low', ocf:'$27.2M' }
   },
   {
-    ticker:'AMPL', name:'Amplitude Inc.', price:7.17, pt:10.65,
-    rev:[261,299,343,400], revYears:['2023','2024','2025','2026E'],
-    spark:[12,11,10,9,8,8.3,7.5,7.0,6.9,7.0,7.17],
+    ticker:'AMPL', name:'Amplitude Inc.', price:10.61, pt:12.82,
+    rev:[261,299,343,409], revYears:['2023','2024','2025','2026E'],
+    spark:[12,11,10,9,8,8.3,7.5,7.0,6.9,7.0,7.17,8.0,9.0,10.0,10.61],
     sector:'Conviction', color:'#D97706',
-    valuation:{ pe:'N/M', ps:'2.2x', evRev:'2.0x', pb:'3.5x' },
-    growth:{ revGrowth:'+17%', epsGrowth:'N/M', grossMargin:'74%', arrGrowth:'+17%' },
-    health:{ cash:'$200M+', currentRatio:'2.1x', debtEq:'0.3x', ocf:'$29.8M' }
+    valuation:{ pe:'N/M', ps:'3.2x', evRev:'3.0x', pb:'3.5x' },
+    growth:{ revGrowth:'+21%', epsGrowth:'N/M', grossMargin:'74%', arrGrowth:'+22%' },
+    health:{ cash:'$200M+', currentRatio:'2.1x', debtEq:'0.3x', ocf:'$23.7M' }
   },
   {
-    ticker:'RSKD', name:'Riskified Ltd.', price:4.98, pt:5.55,
+    ticker:'RSKD', name:'Riskified Ltd.', price:5.33, pt:5.50,
     rev:[275,322,351,380], revYears:['2023','2024','2025','2026E'],
-    spark:[4.8,4.5,4.2,4.0,3.9,4.1,4.3,4.5,4.6,4.85,4.98],
+    spark:[4.8,4.5,4.2,4.0,3.9,4.1,4.3,4.5,4.6,4.85,4.98,5.03,5.10,5.20,5.33],
     sector:'Conviction', color:'#DC2626',
-    valuation:{ pe:'N/M', ps:'2.2x', evRev:'1.32x', pb:'2.63x' },
+    valuation:{ pe:'N/M', ps:'2.36x', evRev:'1.41x', pb:'2.7x' },
     growth:{ revGrowth:'+7%', epsGrowth:'N/M', grossMargin:'52%', arrGrowth:'—' },
     health:{ cash:'$276M', currentRatio:'N/A', debtEq:'8.77%', ocf:'$43M' }
   },
